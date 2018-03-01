@@ -142,7 +142,19 @@ public class PokemonData {
     /// <summary>
     /// Different Gens assign different pokedex num
     /// </summary>
-    /// <remarks>Think there is 3 pokedex</remarks>
+    /// <remarks>
+	/// Full Pokedex List:
+	/// - Kanto
+	/// -Johto
+	/// -Hoenn
+	/// -Sinnoh
+	/// -Unova
+	/// -Kalos Central
+	/// -Kalos Coastal
+	/// -Kalos Mountain
+	/// (do take three above as one tho)
+	/// -Alola
+	/// </remarks>
     public int[,] RegionalPokedex { get { return this.regionalPokedex; } }
     /// <summary>
     /// Name of the specific pokemon+form

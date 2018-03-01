@@ -93,6 +93,9 @@ public class Pokemon //: ePokemons //PokemonData
     /// <summary>
     /// The pokemon fused into this one.
     /// </summary>
+	/// <remarks>
+	/// Should be pokemon as this saves all pokemon data
+	/// </remarks>
     private int fused;
     /// <summary>
     /// Nickname
@@ -210,6 +213,14 @@ public class Pokemon //: ePokemons //PokemonData
     /// Forces the shininess
     /// </summary>
     private bool shinyFlag;
+	/*/// <summary>
+	/// If true treat IV of stat to be functioning AS 31, not to BE 31
+	/// </summary>
+	/// <remarks>
+	/// GEN VII - last in priority
+	/// 
+	/// </remarks> */
+	//private bool [] hyperTrainFlags = { false, false, false, false, false, false };
     /// <summary>
     /// Array of ribbons
     /// </summary>
@@ -235,6 +246,9 @@ public class Pokemon //: ePokemons //PokemonData
     /// <summary>
     /// Maximum length a Pokemon's nickname can be
     /// </summary>
+	/// <remarks>
+	/// In Gen VI this limit is bumped to 12
+	/// </remarks>
     const int NAMELIMIT = 10; //static readonly
     #endregion
 
