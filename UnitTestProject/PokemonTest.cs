@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UnitTestProject
+namespace Tests
 {
     [TestClass]
     public class PokemonTest
@@ -15,16 +15,26 @@ namespace UnitTestProject
             Assert.AreEqual(0, pokemon.HP);
         }
 
-        [TestMethod]
-        public void Pokemon_SetHP_Throw_Error_GreaterThan_MaxHP() { Assert.Fail(); }
-        /*{
+        [TestMethod]//[ExpectedException(typeof(Exception))]
+        public void Pokemon_SetHP_GreaterThan_MaxHP_Equals_MaxHP() //{ Assert.Inconclusive(); }
+        {
             Pokemon pokemon = new Pokemon();
-            pokemon.HP = 25;
-            Assert.AreEqual(error, pokemon.HP);
-        }*/
+            pokemon.HP = pokemon.TotalHP + 1;
+            /*try
+            {
+                pokemon.HP = pokemon.TotalHP + 1;
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                //Assert.AreEqual(error, pokemon.HP);
+                Assert.IsTrue(e is Exception);
+            }*/
+            Assert.AreEqual(pokemon.TotalHP, pokemon.HP);
+        }
 
         [TestMethod]
-        public void Pokemon_SetStatus_To_Burn() { Assert.Fail(); }
+        public void Pokemon_SetStatus_To_Burn() { Assert.Inconclusive(); }
 
         [TestMethod]
         public void Pokemon_FullyHeal() 
@@ -40,7 +50,7 @@ namespace UnitTestProject
         {
             Pokemon pokemon = new Pokemon();
             pokemon.HP = 0;
-            Assert.AreEqual(true, pokemon.isFainted());
+            Assert.IsTrue(pokemon.isFainted());
         }
 
         [TestMethod]
@@ -48,7 +58,7 @@ namespace UnitTestProject
         {
             Pokemon pokemon = new Pokemon();
             pokemon.GivePokerus();
-            Assert.AreEqual(true, pokemon.PokerusStage.Value);
+            Assert.IsTrue(pokemon.PokerusStage.Value);
         }
         #endregion
 
@@ -56,6 +66,16 @@ namespace UnitTestProject
         #endregion
 
         #region Moves...
+        #endregion
+
+        #region Misc
+        [TestMethod, Ignore]
+        public void Pokemon_TestPokemon_SetForm_To_Form2()
+        {
+            Pokemon pokemon = new Pokemon(PokemonData.Pokemon.NONE);
+            pokemon.Form = 2;
+            Assert.AreEqual("test1", pokemon.Name);
+        }
         #endregion
 
         #region

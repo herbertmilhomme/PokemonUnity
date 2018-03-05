@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿//using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +21,8 @@ public class PokemonData {
     /// Different Gens assign different pokedex num
     /// </summary>
     /// <remarks>Think there is 3 pokedex</remarks>
-    private int[,] regionalPokedex;
+    private int[] regionalPokedex;
+    //private enum habitat; //ToDo: Grassland, Mountains...
 	/// <summary>
 	/// Name of the specific pokemon+form
 	/// for given Id in database
@@ -49,8 +50,14 @@ public class PokemonData {
     /// <summary>
     /// </summary>
 	private string pokedexEntry; 
-	private Pokemon[] forms;
-    private int form; //Not sure if this is needed here
+	private int forms; //ToDo: Maybe PokemonData contains count of # of forms?
+    /// <summary>
+    /// Represents CURRENT form, if no form is active, current or does not exist
+    /// then value is 0.
+    /// </summary>
+    /// ToDo: Make a PokemonForm class, that establishes the rule for 
+    /// <see cref="Pokemon"/> and <see cref="Form"/>
+    private int form;// = 0; 
 
 	private Type type1;
 	private Type type2;
@@ -127,6 +134,7 @@ public class PokemonData {
 	private string[] evolutionRequirements;//ToDo: Evolution class type array here
     #endregion
 
+    //ToDo: Should any of the property values be Set-able?
     #region Properties
     /// <summary>
     /// Id is the database value for specific pokemon+form
@@ -141,6 +149,7 @@ public class PokemonData {
     public Pokemon ID { get { return this.id; } }
     /// <summary>
     /// Different Gens assign different pokedex num
+    /// example: Bulbasaur = [1,231]
     /// </summary>
     /// <remarks>
 	/// Full Pokedex List:
@@ -155,7 +164,7 @@ public class PokemonData {
 	/// (do take three above as one tho)
 	/// -Alola
 	/// </remarks>
-    public int[,] RegionalPokedex { get { return this.regionalPokedex; } }
+    public int[,] RegionalPokedex { get { return this.regionalPokedex; } };
     /// <summary>
     /// Name of the specific pokemon+form
     /// for given Id in database
@@ -167,7 +176,7 @@ public class PokemonData {
     /// Deoxys Pokedex# can be 1,
     /// but Deoxys-Power id# can be 32
     /// </example>
-    public string Name { get { return this.name; } }
+    public string Name { get { return PokemonData.GetPokedexTranslation(this.ID).Forms[this.Form] ?? this.name; } }//ToDo: Form = 0 should return null
     /// <summary>
     /// Species is the pokemon breed/genus
     /// <para>Charizard is a Species. 
@@ -184,13 +193,19 @@ public class PokemonData {
     /// </summary>
 	public string PokedexEntry { get { return this.pokedexEntry; } }
     /// <summary>
-    /// Form is the same Pokemon Pokedex entry but a different PokemonId
-    /// If null, returns this.Pokemon.Id
+    /// Form is the same Pokemon Pokedex entry. 
+    /// Changing forms should change name value
     /// </summary>
-    public Pokemon[] Forms { get { return this.forms; } } //Not sure if this is needed here
+    /// but a different PokemonId
+    /// If null, returns this.Pokemon.Id
+    public int Form { get { return this.form; } set { this.form = value; } } //ToDo: Changing forms should change name value
+    //ToDo: I should use the # of Forms from the .xml rather than from the database initializer/constructor
+    public int Forms { get { return this.forms; } } 
 
-    public Type Type1 { get { return this.type1; } }
-    public Type Type2 { get { return this.type2; } }
+    //public virtual Type Type1 { get { return this.type1; } }
+    //public virtual Type Type2 { get { return this.type2; } }
+    //Maybe use this instead?
+    public virtual Type[] Types { get { return new PokemonData.Type[] { this.type1, this.type2 }; } }
     /// <summary>
     /// All three pokemon abilities 
     /// (Abiltiy1, Ability2, HiddenAbility).
@@ -206,6 +221,7 @@ public class PokemonData {
     /// <value>-1f is interpreted as genderless</value>
     /// </summary>
     public float MaleRatio { get { return this.maleRatio; } }
+    public float ShinyChance { get; set; }
     /// <summary>max is 255</summary> 
 	public int CatchRate { get { return this.catchRate; } }
     public EggGroups[] EggGroup { get { return new EggGroups[] { this.eggGroup1, this.eggGroup2 }; } }
@@ -494,21 +510,21 @@ public class PokemonData {
     /// access the same value.</remarks>
     public enum Pokemon
     {
-
+        NONE = 0
     }
     #endregion
 
     #region Constructors
-    public PokemonData(){}
+    public PokemonData() { }// this.name = PokemonData.GetPokedexTranslation(this.ID).Forms[this.Form] ?? this.Name; } //name equals form name unless there is none.
   
-    public PokemonData(Pokemon Id, int[,] regionalDex/*, string name*/, Type? type1, Type? type2, eAbility.Ability[] abilities, //eAbility.Ability? ability1, eAbility.Ability? ability2, eAbility.Ability? hiddenAbility,
+    public PokemonData(Pokemon Id, int[] regionalDex/*, string name*/, Type? type1, Type? type2, eAbility.Ability[] abilities, //eAbility.Ability? ability1, eAbility.Ability? ability2, eAbility.Ability? hiddenAbility,
                         float maleRatio, int catchRate, EggGroups eggGroup1, EggGroups eggGroup2, int hatchTime,
                         float height, float weight, int baseExpYield, LevelingRate levelingRate,
                         /*int? evYieldHP, int? evYieldATK, int? evYieldDEF, int? evYieldSPA, int? evYieldSPD, int? evYieldSPE,*/
                         Color pokedexColor, int baseFriendship,//* / string species, string pokedexEntry,*/
                         int baseStatsHP, int baseStatsATK, int baseStatsDEF, int baseStatsSPA, int baseStatsSPD, int baseStatsSPE,
                         float luminance, /*Color lightColor,*/ int[] movesetLevels, eMoves.Move[] movesetMoves, int[] tmList,
-                        int[] evolutionID, int[] evolutionLevel, int[] evolutionMethod, /*string[] evolutionRequirements,*/ Pokemon[] forms, 
+                        int[] evolutionID, int[] evolutionLevel, int[] evolutionMethod, /*string[] evolutionRequirements,*/ int forms, 
                         int[,] heldItem = null)
     {//new PokemonData(1,1,"Bulbasaur",12,4,65,null,34,45,1,7,20,7f,69f,64,4,PokemonData.PokedexColor.GREEN,"Seed","\"Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun’s rays, the seed grows progressively larger.\"",45,49,49,65,65,45,0f,new int[]{1,3,7,9,13,13,15,19,21,25,27,31,33,37},new int[]{33,45,73,22,77,79,36,75,230,74,38,388,235,402},new int[]{14,15,70,76,92,104,113,148,156,164,182,188,207,213,214,216,218,219,237,241,249,263,267,290,412,447,474,496,497,590},new int[]{2},new int[]{16},new int[]{1})
 
@@ -518,7 +534,7 @@ public class PokemonData {
         this.name = translation.Name;
         this.species = translation.Species;
         this.pokedexEntry = translation.PokedexEntry;
-        this.forms = forms; //| new Pokemon[] { Id }; //ToDo: need new mechanic for how this should work
+        //this.forms = forms; //| new Pokemon[] { Id }; //ToDo: need new mechanic for how this should work
 
         this.type1 = type1 != null ? (PokemonData.Type)type1 : PokemonData.Type.NONE;
         this.type2 = type2 != null ? (PokemonData.Type)type2 : PokemonData.Type.NONE;
@@ -562,25 +578,26 @@ public class PokemonData {
         //this.evolutionRequirements = evolutionRequirements;
     }
 
-    public static PokemonData CreatePokemonData(int Id, int[,] PokeId/*, string name*/, int? type1, int? type2, int? ability1, int? ability2, int? hiddenAbility,
+    public static PokemonData CreatePokemonData(Pokemon Id, int[] PokeId/*, string name*/, int? type1, int? type2, int? ability1, int? ability2, int? hiddenAbility,
                         float maleRatio, int catchRate, int? eggGroup1, int? eggGroup2, int hatchTime,
                         float height, float weight, int baseExpYield, int levelingRate,
                         /*int? evYieldHP, int? evYieldATK, int? evYieldDEF, int? evYieldSPA, int? evYieldSPD, int? evYieldSPE,*/
                         Color pokedexColor, int baseFriendship,//*/ string species, string pokedexEntry,
                         int baseStatsHP, int baseStatsATK, int baseStatsDEF, int baseStatsSPA, int baseStatsSPD, int baseStatsSPE,
                         float luminance, /*Color lightColor,*/ int[] movesetLevels, int[] movesetMoves, int[] tmList,
-                        int[] evolutionID, int[] evolutionLevel, int[] evolutionMethod, /*string[] evolutionRequirements,*/ Pokemon[] forms, int[,] heldItem = null)
+                        int[] evolutionID, int[] evolutionLevel, int[] evolutionMethod, /*string[] evolutionRequirements,*/ int forms, 
+                        int[,] heldItem = null)
     {
-        return new PokemonData(
+        return CreatePokemonData(//new PokemonData(
             (Pokemon)Id,
             PokeId,
             (PokemonData.Type)type1 | PokemonData.Type.NONE,//!= null ? (PokemonData.Type)type1 : PokemonData.Type.NONE,
             (PokemonData.Type)type2 | PokemonData.Type.NONE,//!= null ? (PokemonData.Type)type2 : PokemonData.Type.NONE,
-            new eAbility.Ability[] { 
+            //new eAbility.Ability[] { 
                 (eAbility.Ability)ability1 | eAbility.Ability.NONE,//!= null ? (eAbility.Ability)ability1 : eAbility.Ability.NONE,
                 (eAbility.Ability)ability2 | eAbility.Ability.NONE,//!= null ? (eAbility.Ability)ability2 : eAbility.Ability.NONE,
                 (eAbility.Ability)hiddenAbility | eAbility.Ability.NONE,//!= null ? (eAbility.Ability)hiddenAbility : eAbility.Ability.NONE
-            }, 
+            //}, 
             maleRatio,
             catchRate,
             (EggGroups)eggGroup1 | PokemonData.EggGroups.NONE,//!= null ? (EggGroups)eggGroup1 : PokemonData.EggGroup.NONE, 
@@ -593,14 +610,47 @@ public class PokemonData {
             pokedexColor | PokemonData.Color.NONE,
             baseFriendship, baseStatsHP, baseStatsATK, baseStatsDEF, baseStatsSPA, baseStatsSPD, baseStatsSPE,
             luminance, movesetLevels, System.Array.ConvertAll(movesetMoves, move => (eMoves.Move)move), tmList, 
-            evolutionID, evolutionLevel, evolutionMethod, forms, heldItem);
+            evolutionID, evolutionLevel, evolutionMethod, forms, heldItem);//
 	}
 
-    public static readonly PokemonData[] Database; //Not const because translation values
-    static PokemonData()
+    public static PokemonData CreatePokemonData(Pokemon Id, int[] PokeId/*, string name*/, Type type1, Type type2, eAbility.Ability ability1, eAbility.Ability ability2, eAbility.Ability hiddenAbility,
+                        float maleRatio, int catchRate, EggGroups eggGroup1, EggGroups eggGroup2, int hatchTime,
+                        float height, float weight, int baseExpYield, LevelingRate levelingRate,
+                        /*int? evYieldHP, int? evYieldATK, int? evYieldDEF, int? evYieldSPA, int? evYieldSPD, int? evYieldSPE,*/
+                        Color pokedexColor, int baseFriendship,//*/ string species, string pokedexEntry,
+                        int baseStatsHP, int baseStatsATK, int baseStatsDEF, int baseStatsSPA, int baseStatsSPD, int baseStatsSPE,
+                        float luminance, /*Color lightColor,*/ int[] movesetLevels, eMoves.Move[] movesetMoves, int[] tmList,
+                        int[] evolutionID, int[] evolutionLevel, int[] evolutionMethod, /*string[] evolutionRequirements,*/ int forms, 
+                        int[,] heldItem = null)
     {
-        Database = new PokemonData[] {
-            null
+        return new PokemonData(
+            Id,
+            PokeId,
+            type1, //| PokemonData.Type.NONE,//!= null ? (PokemonData.Type)type1 : PokemonData.Type.NONE,
+            type2, //| PokemonData.Type.NONE,//!= null ? (PokemonData.Type)type2 : PokemonData.Type.NONE,
+            new eAbility.Ability[] { 
+                ability1, //| eAbility.Ability.NONE,//!= null ? (eAbility.Ability)ability1 : eAbility.Ability.NONE,
+                ability2, //| eAbility.Ability.NONE,//!= null ? (eAbility.Ability)ability2 : eAbility.Ability.NONE,
+                hiddenAbility, //| eAbility.Ability.NONE,//!= null ? (eAbility.Ability)hiddenAbility : eAbility.Ability.NONE
+            }, 
+            maleRatio,
+            catchRate,
+            eggGroup1, //| PokemonData.EggGroups.NONE,//!= null ? (EggGroups)eggGroup1 : PokemonData.EggGroup.NONE, 
+            eggGroup2, //| PokemonData.EggGroups.NONE,//!= null ? (EggGroups)eggGroup2 : PokemonData.EggGroup.NONE, 
+            hatchTime, 
+            height, 
+            weight, 
+            baseExpYield, 
+            levelingRate, 
+            pokedexColor | PokemonData.Color.NONE,
+            baseFriendship, baseStatsHP, baseStatsATK, baseStatsDEF, baseStatsSPA, baseStatsSPD, baseStatsSPE,
+            luminance, movesetLevels,movesetMoves, /*System.Array.ConvertAll(movesetMoves, move => (eMoves.Move)move),*/ tmList, 
+            evolutionID, evolutionLevel, evolutionMethod, forms, heldItem);//
+	}
+
+    /// Not const because translation values
+    public static readonly PokemonData[] Database = new PokemonData[] {
+            //null
             //  PokemonData.CreatePokemonData(ID, NAME, PokemonData.Type.TYPE1, PokemonData.Type.TYPE2, Ability1, Ability2, HiddenAbility,
             //				MaleRatio, CatchRate, PokemonData.EggGroup.EGGGROUP1, PokemonData.EggGroup.EGGGROUP2, HatchTime, Height, Weight,
             //				EXPYield, PokemonData.LevelingRate.LEVELINGRATE, evYieldHP,ATK,DEF,SPA,SPD,SPE, PokemonData.PokedexColor.COLOR, BaseFriendship,
@@ -610,12 +660,49 @@ public class PokemonData {
             //				new string[]{ "move", "move", "move", etc...} ), //needs to be loaded separately...
             //				new int[]{pokemonID}, 
             //				new string[]{"Method,Parameter"}),
+            PokemonData.CreatePokemonData(Pokemon.NONE, new int[1], Type.NONE, Type.NONE, eAbility.Ability.NONE, eAbility.Ability.NONE, eAbility.Ability.NONE,
+                        0f, 100, EggGroups.NONE, EggGroups.NONE, 1000,
+                        10f, 150f, 15, LevelingRate.ERRATIC,
+                        /*int? evYieldHP, int? evYieldATK, int? evYieldDEF, int? evYieldSPA, int? evYieldSPD, int? evYieldSPE,*/
+                        Color.NONE, 50,
+                        10, 5, 5, 5, 5, 5,
+                        0f, new int[] { 1,2,3 }, new eMoves.Move[4], null,//int[] tmList,
+                        null, null, null, 4,//int[] evolutionID, int[] evolutionLevel, int[] evolutionMethod, //int forms, 
+                        null) //Test
         };
-    }
+    /*static PokemonData()
+    {
+        Database = new PokemonData[] {
+            //null
+            //  PokemonData.CreatePokemonData(ID, NAME, PokemonData.Type.TYPE1, PokemonData.Type.TYPE2, Ability1, Ability2, HiddenAbility,
+            //				MaleRatio, CatchRate, PokemonData.EggGroup.EGGGROUP1, PokemonData.EggGroup.EGGGROUP2, HatchTime, Height, Weight,
+            //				EXPYield, PokemonData.LevelingRate.LEVELINGRATE, evYieldHP,ATK,DEF,SPA,SPD,SPE, PokemonData.PokedexColor.COLOR, BaseFriendship,
+            //				Species, PokedexEntry (choose your favourite) //needs to be loaded seperately...
+            //				baseStatsHP,ATK,DEF,SPA,SPD,SPE, Luminance (0 if unknown), LightColor (Color.clear if unknown)
+            //				new int[]{ level, level, level, etc...}
+            //				new string[]{ "move", "move", "move", etc...} ), //needs to be loaded separately...
+            //				new int[]{pokemonID}, 
+            //				new string[]{"Method,Parameter"}),
+            PokemonData.CreatePokemonData(Pokemon.NONE, new int[1], Type.NONE, Type.NONE, eAbility.Ability.NONE, eAbility.Ability.NONE, eAbility.Ability.NONE,
+                        0f, 100, EggGroups.NONE, EggGroups.NONE, 1000,
+                        10f, 150f, 15, LevelingRate.ERRATIC,
+                        //*int? evYieldHP, int? evYieldATK, int? evYieldDEF, int? evYieldSPA, int? evYieldSPD, int? evYieldSPE,* /
+                        Color.NONE, 50,
+                        10, 5, 5, 5, 5, 5,
+                        0f, new int[] { 1,2,3 }, new eMoves.Move[4], null,//int[] tmList,
+                        null, null, null, 4,//int[] evolutionID, int[] evolutionLevel, int[] evolutionMethod, //int forms, 
+                        null) //Test
+        };
+    }*/
 
-    private static Dictionary<int, PokedexTranslation> _pokeTranslations = LoadPokedexTranslations(SaveData.currentSave.playerLanguage);
-
-    public static Dictionary<int, PokedexTranslation> LoadPokedexTranslations(GlobalVariables.Language language)
+#if DEBUG
+    private static Dictionary<int, PokedexTranslation> _pokeTranslations;// = LoadPokedexTranslations();
+#else
+    private static Dictionary<int, PokedexTranslation> _pokeTranslations;// = LoadPokedexTranslations(SaveData.currentSave.playerLanguage | GlobalVariables.Language.English);
+#endif
+    private static Dictionary<int, PokedexTranslation> _pokeEnglishTranslations;// = LoadEnglishPokedexTranslations();
+    ///ToDo: Should be a void that stores value to _pokeTranslations instead of returning...
+    public static void/*Dictionary<int, PokedexTranslation>*/ LoadPokedexTranslations(GlobalVariables.Language language = GlobalVariables.Language.English)//, int form = 0
     {
         var data = new Dictionary<int, PokedexTranslation>();
 
@@ -630,7 +717,14 @@ public class PokemonData {
                 break;
         }
         System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument(); // xmlDoc is the new xml document.
-        string file = Application.dataPath + "/Resources/Database/Pokemon/Pokemon_" + fileLanguage + ".xml"; //"/Resources/Database/PokemonTranslations/Pokemon_"
+        //ToDo: Consider "/Resources/Database/PokemonTranslations/Pokemon_"
+#if DEBUG
+        string file = @"..\..\..\\Pokemon Unity\Assets\Resources\Database\Pokemon\Pokemon_" + fileLanguage + ".xml"; //TestProject\bin\Debug
+        //string file = System.Environment.CurrentDirectory + @"\Resources\Database\Pokemon\Pokemon_" + fileLanguage + ".xml"; //TestProject\bin\Debug
+        //string file =  @"$(SolutionDir)\Assets\Resources\Database\Pokemon\Pokemon_" + fileLanguage + ".xml"; //Doesnt work
+#else
+        string file = UnityEngine.Application.dataPath + "/Resources/Database/Pokemon/Pokemon_" + fileLanguage + ".xml"; //Use for production
+#endif
         FileStream fs = new FileStream(file, FileMode.Open);
         xmlDoc.Load(fs);
 
@@ -639,14 +733,28 @@ public class PokemonData {
             foreach (System.Xml.XmlNode node in xmlDoc.GetElementsByTagName("Pokemon"))
             {
                 var translation = new PokedexTranslation();
-                translation.Name = node.Attributes["name"].Value;
+                translation.Name = node.Attributes["name"].Value; //ToDo: Name = "name" Where formId == 0; else name = formId.name
+                //ToDo: Maybe add a forms array, and a new method for single name calls
+                translation.Forms = new string[node.Attributes.Count-3]; int n = 1;//only count forms?
+                //int n = 1;translation.Forms[0] = node.Attributes["name"].Value;//that or return an empty array T[0]
+                for (int i = 4; i < node.Attributes.Count; i++)//foreach(System.Xml.XmlAttribute attr in node)
+                {
+                    //Skipping first 4 values will save processing
+                    if (node.Attributes[i].LocalName.Contains("form")) //Name vs LocalName?
+                    {
+                        //translation.Forms[i-4] = node.Attributes[i].Value; //limits xml to only 4 set values 
+                        translation.Forms[n] = node.Attributes[i].Value; n++;
+                    }
+                }
                 translation.Species = node.Attributes["genus"].Value;
                 translation.PokedexEntry = node.InnerText;
                 data.Add(int.Parse(node.Attributes["id"].Value), translation); //Is this safe? Possible overwritting of values with bad entries
             }
         }
 
-        return data;
+        //ToDo: Is filestream still open or does it need to be closed and disposed of?
+        fs.Dispose(); fs.Close();
+        _pokeTranslations = data;//return data;
     }
 
     /// <summary>
@@ -656,23 +764,29 @@ public class PokemonData {
     /// <param name="language"></param>
     /// <returns></returns>
     /// <remarks>ToDo: If not in foreign language, check and load in English; else...</remarks>
-    public static PokedexTranslation GetPokedexTranslation(Pokemon id, GlobalVariables.Language language = GlobalVariables.Language.English)
+    public static PokedexTranslation GetPokedexTranslation(Pokemon id, GlobalVariables.Language language = GlobalVariables.Language.English)// int form = 0,
     {
-        int arrayId = GetPokemon(id).ArrayId;
         if (_pokeTranslations == null) //should return english if player's default language is null
         {
-            LoadPokedexTranslations(language);
+            LoadPokedexTranslations(language);//, form
         }
 
-        if (!_pokeTranslations.ContainsKey(arrayId))// int id
+        int arrayId = (int)id;// GetPokemon(id).ArrayId; //unless db is set, it'll keep looping null...
+        if (!_pokeTranslations.ContainsKey(arrayId) && language == GlobalVariables.Language.English)
         {
-            Debug.LogError("Failed to load pokedex translation for pokemon with id: " + (int)id);
-            return new PokedexTranslation();
+            //Debug.LogError("Failed to load pokedex translation for pokemon with id: " + (int)id); //ToDo: Throw exception error
+            throw new System.Exception(string.Format("Failed to load pokedex translation for pokemon with id: {0}_{1}", (int)id, id.ToString()));
+            //return new PokedexTranslation();
+        }
+        //ToDo: Show english text for missing data on foreign languages 
+        else if (!_pokeTranslations.ContainsKey(arrayId) && language != GlobalVariables.Language.English) 
+        {
+            return _pokeEnglishTranslations[arrayId];
         }
 
         return _pokeTranslations[arrayId];// int id
     }
-    #endregion
+#endregion
 
     #region Methods
     /// <summary>
@@ -701,6 +815,7 @@ public class PokemonData {
             if (pokemon.ID == ID) return pokemon;
         }
         throw new System.Exception("Pokemon ID doesnt exist in the database. Please check PokemonData constructor.");
+        //return null;
     }
 
 	static int getPokemonArrayId(Pokemon ID)
@@ -934,7 +1049,7 @@ public class PokemonData {
 
 public static class Experience
 {
-    #region expTable
+#region expTable
     private static int[] expTableErratic = new int[]{
         0,15,52,122,237,406,637,942,1326,1800,
         2369,3041,3822,4719,5737,6881,8155,9564,11111,12800,
@@ -1006,7 +1121,7 @@ public static class Experience
         479600,507617,529063,559209,582187,614566,639146,673863,700115,737280,
         765275,804997,834809,877201,908905,954084,987754,1035837,1071552,1122660,
         1160499,1214753,1254796,1312322,1354652,1415577,1460276,1524731,1571884,1640000};
-    #endregion
+#endregion
 
     public static int GetStartExperience(PokemonData.LevelingRate levelingRate, int currentLevel)
     {
@@ -1019,7 +1134,7 @@ public static class Experience
         {
             if (currentLevel > 100)
             {
-                exp = (int)Mathf.Floor((Mathf.Pow(currentLevel, 3)) * (160 - currentLevel) / 100);
+                exp = (int)System.Math.Floor((System.Math.Pow(currentLevel, 3)) * (160 - currentLevel) / 100);
             }
             else exp = expTableErratic[currentLevel - 1]; //Because the array starts at 0, not 1.
         }
@@ -1027,7 +1142,7 @@ public static class Experience
         {
             if (currentLevel > 100)
             {
-                exp = (int)Mathf.Floor(Mathf.Pow(currentLevel, 3) * (4 / 5));
+                exp = (int)System.Math.Floor(System.Math.Pow(currentLevel, 3) * (4 / 5));
             }
             else exp = expTableFast[currentLevel - 1];
         }
@@ -1035,7 +1150,7 @@ public static class Experience
         {
             if (currentLevel > 100)
             {
-                exp = (int)Mathf.Floor(Mathf.Pow(currentLevel, 3));
+                exp = (int)System.Math.Floor(System.Math.Pow(currentLevel, 3));
             }
             else exp = expTableMediumFast[currentLevel - 1];
         }
@@ -1043,7 +1158,7 @@ public static class Experience
         {
             if (currentLevel > 100)
             {
-                exp = (int)Mathf.Floor(((6 / 5) * Mathf.Pow(currentLevel - 1, 3)) - (15 * Mathf.Pow(currentLevel - 1, 3)) + (100 * (currentLevel - 1)) - 140);
+                exp = (int)System.Math.Floor(((6 / 5) * System.Math.Pow(currentLevel - 1, 3)) - (15 * System.Math.Pow(currentLevel - 1, 3)) + (100 * (currentLevel - 1)) - 140);
             }
             else exp = expTableMediumSlow[currentLevel - 1];
         }
@@ -1051,7 +1166,7 @@ public static class Experience
         {
             if (currentLevel > 100)
             {
-                exp = (int)Mathf.Floor(Mathf.Pow(currentLevel, 3) * (5 / 4));
+                exp = (int)System.Math.Floor(System.Math.Pow(currentLevel, 3) * (5 / 4));
             }
             else exp = expTableSlow[currentLevel - 1];
         }
@@ -1059,7 +1174,7 @@ public static class Experience
         {
             if (currentLevel > 100)
             {
-                exp = (int)Mathf.Floor(Mathf.Pow(currentLevel, 3) * ((Mathf.Floor(Mathf.Pow(currentLevel, 3) / 2) + 32) / 50));
+                exp = (int)System.Math.Floor(System.Math.Pow(currentLevel, 3) * ((System.Math.Floor(System.Math.Pow(currentLevel, 3) / 2) + 32) / 50));
             }
             else exp = expTableFluctuating[currentLevel - 1];
         }

@@ -202,6 +202,7 @@ public class Pokemon //: ePokemons //PokemonData
     /// </summary>
     /// <remarks>
     /// isMale; null = genderless?
+    /// Should consider gender as byte? bool takes up same amount of space
     /// </remarks>
     private bool? genderFlag;
     /// <summary>
@@ -212,7 +213,7 @@ public class Pokemon //: ePokemons //PokemonData
     /// <summary>
     /// Forces the shininess
     /// </summary>
-    private bool shinyFlag;
+     private bool? shinyFlag;
 	/*/// <summary>
 	/// If true treat IV of stat to be functioning AS 31, not to BE 31
 	/// </summary>
@@ -221,6 +222,7 @@ public class Pokemon //: ePokemons //PokemonData
 	/// 
 	/// </remarks> */
 	//private bool [] hyperTrainFlags = { false, false, false, false, false, false };
+   
     /// <summary>
     /// Array of ribbons
     /// </summary>
@@ -416,15 +418,125 @@ public class Pokemon //: ePokemons //PokemonData
     #endregion
 
     #region Gender
+    /// <summary>
+    /// Returns this Pokemons gender. male; female; genderless.
+    /// Sets this Pokemon's gender to a particular gender (if possible)
+    /// </summary>
+    public bool? Gender { get { return this.genderFlag; } }
+
+    /*// <summary>
+    /// Helper function that determines whether the input values would make a female.
+    /// </summary>
+    /// ToDo: isMale; isFemale; isGenderless... properties?
+    public bool? isMale/isFemale/isGenderless//(float genderRate = this._base.MaleRatio)
+    {
+        get
+        {
+            if (this._base.MaleRatio == 100f) return true; 
+            if (this._base.MaleRatio == 100f) return false; //Always female
+            return null; //genderless
+        }
+    }*/
+
+    /// <summary>
+    /// Returns whether this Pokemon species is restricted to only ever being one gender (or genderless)
+    /// </summary>
+    public bool isSingleGendered { get { return true; } }
     #endregion
 
     #region Ability
+    /// <summary>
+    /// Returns the ID of the Pokemons Ability.
+    /// </summary>
+    /// ToDo: Sets this Pokemon's ability to a particular ability (if possible)
+    public eAbility.Ability[] Abilities { get { return abilityFlag; } }//ToDo: set { abilityFlag = value; }
+
+    /// <summary>
+    /// Returns whether this Pokemon has a partiular ability
+    /// </summary>
+    /// <param name="ability"></param>
+    /// <returns></returns>
+    public bool hasAbility(eAbility.Ability ability = eAbility.Ability.NONE)
+    {
+        if(ability == eAbility.Ability.NONE) return (int)Abilities[0] > 0 || (int)Abilities[1] > 0 || (int)Abilities[2] > 0;
+        else
+        {
+            return Abilities[0] == ability || Abilities[1] == ability || Abilities[2] == ability;
+        }
+        //return false;
+    }
+
+    public bool hasHiddenAbility()
+    {
+        return Abilities[2] != eAbility.Ability.NONE;
+    }
+
+    /// <summary>
+    /// Returns a list of abilities this Pokemon can have.
+    /// </summary>
+    /// <returns></returns>
+    /// Is there a list of abilities a pokemon can have outside of "default" values?
+    public eAbility.Ability[] getAbilityList()
+    {
+        //List<eAbility.Ability> abilList;
+        //foreach(){ list.add() }
+        //eAbility.Ability[] abilities = abilList.ToArray();
+        //return abilities;
+        return this._base.Abilities; //ToDo: List of abilities?
+    }
     #endregion
 
     #region Nature
+    /// <summary>
+    /// Returns the ID of this Pokemon's nature
+    /// Sets this Pokemon's nature to a particular nature.
+    /// </summary>
+    public NatureDatabase.Nature Nature { get { return this.natureFlag; } }//ToDo: set { this.natureFlag = value; nature.calcStats(); }
+
+    /// <summary>
+    /// Returns whether this Pokemon has a particular nature
+    /// </summary>
+    /// <param name="nature"></param>
+    /// <returns></returns>
+    public bool hasNature(NatureDatabase.Nature nature = 0) //None
+    {
+        if ((int)nature < 1) return (int)this.Nature >= 1;
+        else
+        {
+            return this.Nature == nature;
+        }
+    }
     #endregion
 
     #region Shininess
+    /// <summary>
+    /// Uses math to determine if Pokemon is shiny.
+    /// Returns whether this Pokemon is shiny (differently colored)
+    /// </summary>
+    /// <returns></returns>
+    /// Use this when rolling for shiny...
+    /// Honestly, without this math, i probably would've done something a lot more primative.
+    /// Look forward to primative math on wild pokemon encounter chances...
+    public bool isShiny()
+    {
+        if (shinyFlag.HasValue) return shinyFlag.Value;
+        int a = this.PersonalId ^ this.TrainerId; //Wild Pokemon TrainerId?
+        int b = a & 0xFFFF;
+        int c = (a >> 16) & 0xFFFF;
+        int d = b ^ c;
+        return d < _base.ShinyChance;
+    }
+
+    /// <summary>
+    /// Makes this Pokemon shiny or not shiny
+    /// </summary>
+    public bool IsShiny
+    {
+        //If not manually set, use math to figure out.
+        //ToDo: Store results to save on redoing future execution? 
+        get { return shinyFlag ?? isShiny()/*false*/; }
+        set { shinyFlag = value; }
+    }
     #endregion
 
     #region Pokerus
@@ -507,6 +619,25 @@ public class Pokemon //: ePokemons //PokemonData
     #endregion
 
     #region Types
+    /// <summary>
+    /// Returns whether this Pokemon has the specified type.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public bool hasType(PokemonData.Type type)
+    {
+        return this._base.Types[0] == type || this._base.Types[1] == type;
+    }
+
+    /// <summary>
+    /// Returns this Pokemon's first type
+    /// </summary>
+    public PokemonData.Type Type1 { get { return this._base.Types[0]; } }
+
+    /// <summary>
+    /// Returns this Pokemon's second type
+    /// </summary>
+    public PokemonData.Type Type2 { get { return this._base.Types[1]; } }
     #endregion
 
     #region Moves
@@ -519,6 +650,14 @@ public class Pokemon //: ePokemons //PokemonData
     #endregion
 
     #region Other
+    /// <summary>
+    /// Nickname; 
+    /// Returns Pokemon species name if not nicknamed.
+    /// </summary>
+    public string Name { get { return name ?? _base.Name; } }
+
+    public int Form { set { /*if(value <= _base.Forms)*/_base.Form = value; } }//ToDo: Fix Forms and uncomment
+
     /// <summary>
     /// Returns the species name of this Pokemon
     /// </summary>
@@ -573,7 +712,7 @@ public class Pokemon //: ePokemons //PokemonData
         get { return this.hp; } //ToDo: If greater than totalHP throw error?
         set
         {
-            this.hp = value < 0 ? 0 : value;
+            this.hp = value < 0 ? 0 : value > this.TotalHP ? TotalHP : value;
             if (this.hp == 0) this.status = 0; // statusCount = 0; //ToDo: Fainted
         }
     }
