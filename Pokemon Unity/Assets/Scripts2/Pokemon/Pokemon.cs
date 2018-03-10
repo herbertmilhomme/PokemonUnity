@@ -96,7 +96,7 @@ public class Pokemon //: ePokemons //PokemonData
 	/// <remarks>
 	/// Should be pokemon as this saves all pokemon data
 	/// </remarks>
-    private int fused;
+	private Pokemon fused;
     /// <summary>
     /// Nickname
     /// </summary>

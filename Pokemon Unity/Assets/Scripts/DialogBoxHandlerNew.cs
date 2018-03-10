@@ -304,14 +304,14 @@ public class DialogBoxHandlerNew : MonoBehaviour
     public IEnumerator DrawChoiceBox(string[] choices, int yPosition, int width)
     {
         yield return
-            StartCoroutine(DrawChoiceBox(new string[] {"Yes", "No"}, null, -1, defaultChoiceY, defaultChoiceWidth));
+			StartCoroutine(DrawChoiceBox(choices, null, -1, yPosition, width));
     }
 
     public IEnumerator DrawChoiceBox(string[] choices, int startIndex, int yPosition, int width)
     {
         yield return
-            StartCoroutine(DrawChoiceBox(new string[] {"Yes", "No"}, null, startIndex, defaultChoiceY,
-                defaultChoiceWidth));
+			StartCoroutine(DrawChoiceBox(choices, null, startIndex, yPosition,
+                width));
     }
 
     public IEnumerator DrawChoiceBox(string[] choices, string[] flavourText, int startIndex, int yPosition, int width)

@@ -164,7 +164,7 @@ public class PokemonData {
 	/// (do take three above as one tho)
 	/// -Alola
 	/// </remarks>
-    public int[,] RegionalPokedex { get { return this.regionalPokedex; } };
+    public int[] RegionalPokedex { get { return this.regionalPokedex; } }
     /// <summary>
     /// Name of the specific pokemon+form
     /// for given Id in database

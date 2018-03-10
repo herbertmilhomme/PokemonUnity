@@ -120,6 +120,18 @@ public class Trainer : MonoBehaviour
         averageLevel = Mathf.CeilToInt((float) averageLevel / (float) party.Length);
         return averageLevel * prizeMoney;
     }
+	//this calls when you got defeated in battle
+	public int LoseMoney ()
+	{
+		int lostMoney = 32; //TODO make this dependant on story progression (badges/stamps)
+		int highestLevel = 0;
+		for (int i = 0; i < party.Length; i++) {
+			if (party [i].getLevel () > highestLevel) {
+				highestLevel = party [i].getLevel ();
+			}
+		}
+		return highestLevel * lostMoney;
+	}
 }
 
 

@@ -350,6 +350,7 @@ public class BattleHandler : MonoBehaviour
     };
 
     //Stats can be changed in battle. These changes never persist after swapping out.
+	// Unless user shwitches out using move Baton Pass
     private int[][] pokemonStats = new int[][]
     {
         new int[6], //ATK
@@ -362,6 +363,8 @@ public class BattleHandler : MonoBehaviour
     //Ability can be changed in battle. These changes never persist after swapping out.
     private string[] pokemonAbility = new string[6];
     //Types can be changed in battle. These changes never persist after swapping out.
+	// Third slot must be added only in battle beacuse of Forest Curse and Trick-or-treat
+	// Do nullufy this when using type-changing move like Conversion or soak
     private PokemonDataOld.Type[] pokemonType1 = new PokemonDataOld.Type[]
     {
         PokemonDataOld.Type.NONE, PokemonDataOld.Type.NONE, PokemonDataOld.Type.NONE,
@@ -427,7 +430,8 @@ public class BattleHandler : MonoBehaviour
         NONE,
         ELECTRIC,
         GRASSY,
-        MISTY
+        MISTY,
+		PSYCHIC //added in gen VII
     }
 
     private WeatherEffect weather = WeatherEffect.NONE; //unused
@@ -460,11 +464,18 @@ public class BattleHandler : MonoBehaviour
     private bool[] destinyBond = new bool[6];
     private bool[] minimized = new bool[6];
     private bool[] defenseCurled = new bool[6];
+	private bool [] redirecting = new bool [6]; //move Follow Me in doubles and triples
 
     //Turn Feedback Data
     private bool[] pokemonHasMoved = new bool[6];
     private string[] previousMove = new string[6]; //why is this unused
 
+	//add Throat chop data (target cannot use sound-based moves for two turns)
+
+	//TODO adjust code for doubles, triples and rotary
+
+	//although triples and rotary are removed in gen 7 :(
+	//I hope they get restored next gen
     void Awake()
     {
         Dialog = transform.GetComponent<DialogBoxHandlerNew>();
