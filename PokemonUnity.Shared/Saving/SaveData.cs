@@ -38,7 +38,7 @@ namespace PokemonUnity.Saving
 
         #region PlayerInfo
         public bool?[] Pokedex { get; private set; }
-        public byte[,] Pokedex2 { get; private set; }
+        public byte[][] Pokedex2 { get; private set; }
 		/// <summary>
 		/// Duration of time accumulated on save file
 		/// </summary>
@@ -125,7 +125,7 @@ namespace PokemonUnity.Saving
 			TrainerID			= trainer		?? Game.Player.Trainer.TrainerID;
 			SecretID			= secret		?? Game.Player.Trainer.SecretID;
 			IsMale				= gender		?? Game.Player.isMale;
-			Pokedex2			= pokedex		?? Game.Player.Pokedex;
+			//Pokedex2			= pokedex		?? Game.Player.Pokedex;
 			PlayerTime			= time			?? Game.Player.PlayTime;
 			PlayerPosition		= position		?? Game.Player.playerPosition;
 			PlayerDirection		= direction		?? Game.Player.playerDirection;
@@ -141,6 +141,17 @@ namespace PokemonUnity.Saving
 			//	{
 			//		PlayerParty[i]	= Game.Player.Trainer.Party[i];
 			//	}
+
+			byte[,] dex2		= pokedex		?? Game.Player.Pokedex;
+			Pokedex2 = new byte[dex2.GetLength(0)][];
+			for (int i = 0; i < Pokedex2.GetLength(0); i++)
+			{
+				Pokedex2[i] = new byte[dex2.GetLength(1)];
+				for (int j = 0; j < Pokedex2.GetLength(1); j++)
+				{
+					Pokedex2[i][j] = (byte)dex2[i, j];
+				}
+			}
 				
 			//ToDo: Store user's Active PC
 			PC = pc ?? new SeriPC(Game.PC_Poke, Game.PC_boxNames, Game.PC_boxTexture, Game.PC_Items);
