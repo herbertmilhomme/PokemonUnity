@@ -1400,3 +1400,87 @@ CREATE UNIQUE INDEX IF NOT EXISTS "ix_move_meta_ailments_identifier" ON "move_me
 	"identifier"
 );
 COMMIT;
+BEGIN TRANSACTION;
+CREATE VIEW as pokemon_abilities_view
+select 
+	p.id as pokemon_id,
+	CAST(AVG(CASE WHEN a.slot = 1 THEN a.ability_id
+    END) as int) as ability1
+	,CAST(AVG(CASE WHEN a.slot = 2 THEN a.ability_id 
+    END) as int) as ability2
+	,CAST(AVG(CASE WHEN a.slot = 3 THEN a.ability_id 
+    END) as int) as ability3
+	from "pokemon" as p
+	join "pokemon_abilities" as a on p.id = a.pokemon_id
+	group by p.id;
+CREATE VIEW as pokemon_stats_view
+select 
+	p.id as pokemon_id,
+	,CAST(AVG(CASE WHEN i.stat_id = 1 THEN i.base_stat
+    END) as int) as bhp
+	,CAST(AVG(CASE WHEN i.stat_id = 2 THEN i.base_stat
+    END) as int) as batk
+	,CAST(AVG(CASE WHEN i.stat_id = 3 THEN i.base_stat
+    END) as int) as bdef
+	,CAST(AVG(CASE WHEN i.stat_id = 4 THEN i.base_stat
+    END) as int) as bspa
+	,CAST(AVG(CASE WHEN i.stat_id = 5 THEN i.base_stat
+    END) as int) as bspd
+	,CAST(AVG(CASE WHEN i.stat_id = 6 THEN i.base_stat
+    END) as int) as bspe
+	,CAST(AVG(CASE WHEN i.stat_id = 1 THEN i.effort
+    END) as int) as ehp
+	,CAST(AVG(CASE WHEN i.stat_id = 2 THEN i.effort
+    END) as int) as eatk
+	,CAST(AVG(CASE WHEN i.stat_id = 3 THEN i.effort
+    END) as int) as edef
+	,CAST(AVG(CASE WHEN i.stat_id = 4 THEN i.effort
+    END) as int) as espa
+	,CAST(AVG(CASE WHEN i.stat_id = 5 THEN i.effort
+    END) as int) as espd
+	,CAST(AVG(CASE WHEN i.stat_id = 6 THEN i.effort
+    END) as int) as espe
+	from "pokemon" as p
+	join "pokemon_stats" as i on p.id = i.pokemon_id
+	group by p.id;
+CREATE VIEW as pokemon_egg_groups_view 
+select 
+	p.id as pokemon_id,
+	MIN(e.egg_group_id) as egg_group1
+	,CASE WHEN COUNT(e.species_id) = 2 THEN MAX(e.egg_group_id) ELSE 0   
+    END as egg_group2
+	from "pokemon" as p
+	join "pokemon_egg_groups" as e on p.species_id = e.species_id
+	group by p.id;
+CREATE VIEW as pokemon_types_view
+select 
+	p.id as pokemon_id,
+	CAST(AVG(CASE WHEN t.slot = 1 THEN t.type_id  
+    END) as int) as type1
+	,CAST(AVG(CASE WHEN t.slot = 2 THEN t.type_id ELSE 0
+    END) as int) as type2
+	from "pokemon" as p
+	join "pokemon_types" as t on p.id = t.pokemon_id
+	group by p.id;
+CREATE VIEW pokemon_view as 
+select pokemon.id, pokemon.species_id, pokemon.identifier, pokemon.height, pokemon.weight, pokemon.base_experience, --pokemon."order"
+pokemon_abilities_view.ability1, pokemon_abilities_view.ability2, pokemon_abilities_view.ability3, 
+pokemon_egg_groups_view.egg_group1, pokemon_egg_groups_view.egg_group2,
+pokemon_stats_view.bhp, pokemon_stats_view.batk, pokemon_stats_view.bdef, pokemon_stats_view.bspa, pokemon_stats_view.bspd, pokemon_stats_view.bspe, pokemon_stats_view.ehp, pokemon_stats_view.eatk, pokemon_stats_view.edef, pokemon_stats_view.espa, pokemon_stats_view.espd, pokemon_stats_view.espe,
+pokemon_types_view.type1, pokemon_types_view.type2,
+pokemon_color_names.name as color,
+pokemon_species.generation_id, pokemon_species.evolves_from_species_id, pokemon_species.evolution_chain_id, pokemon_species.color_id, pokemon_species.shape_id, pokemon_species.habitat_id, pokemon_species.gender_rate, pokemon_species.capture_rate, pokemon_species.base_happiness, pokemon_species.is_baby, pokemon_species.hatch_counter, pokemon_species.has_gender_differences, pokemon_species.growth_rate_id, pokemon_species.forms_switchable, pokemon_species."order"
+pokemon_species_names.name,pokemon_species_names.genus,
+pokemon_species_flavor_text.flavor_text
+from pokemon
+left join pokemon_abilities_view on pokemon.id = abilities_view.pokemon_id 
+left join egg_group_view on egg_group_view.species_id = pokemon.id 
+left join pokemon_stats_view on pokemon_stats_view.pokemon_id = pokemon.id 
+left join pokemon_types_view on pokemon_types_view.pokemon_id = pokemon.id 
+left join pokemon_species on pokemon_species.id = pokemon.id
+left join pokemon_colors on pokemon_colors.id = pokemon_species.color_id
+left join pokemon_color_names on pokemon_color_names.pokemon_color_id=pokemon_colors.id AND pokemon_color_names.local_language_id=9
+left join pokemon_species_names on pokemon_species_names.pokemon_species_id = pokemon.id AND pokemon_species_names.local_language_id=9
+left join pokemon_species_flavor_text on pokemon_species_flavor_text.species_id = pokemon.id AND pokemon_species_flavor_text.version_id=26 AND pokemon_species_flavor_text.language_id=9
+order by pokemon.id ASC;
+COMMIT;
