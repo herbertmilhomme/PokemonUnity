@@ -1451,7 +1451,7 @@ CREATE VIEW pokemon_egg_groups_view as
 select 
 	p.id as pokemon_id,
 	MIN(e.egg_group_id) as egg_group1
-	,CASE WHEN COUNT(e.species_id) = 2 THEN MAX(e.egg_group_id) ELSE 0   
+	,CASE WHEN COUNT(e.species_id) = 2 THEN MAX(e.egg_group_id) --ELSE 0   
     END as egg_group2
 	from "pokemon" as p
 	join "pokemon_egg_groups" as e on p.species_id = e.species_id
@@ -1461,7 +1461,7 @@ select
 	p.id as pokemon_id,
 	CAST(AVG(CASE WHEN t.slot = 1 THEN t.type_id  
     END) as int) as type1
-	,CAST(AVG(CASE WHEN t.slot = 2 THEN t.type_id ELSE 0
+	,CAST(AVG(CASE WHEN t.slot = 2 THEN t.type_id --ELSE 0
     END) as int) as type2
 	from "pokemon" as p
 	join "pokemon_types" as t on p.id = t.pokemon_id
@@ -1477,8 +1477,8 @@ pokemon_species.generation_id, pokemon_species.evolves_from_species_id, pokemon_
 pokemon_species_names.name,pokemon_species_names.genus,
 pokemon_species_flavor_text.flavor_text
 from pokemon
-left join pokemon_abilities_view on pokemon.id = abilities_view.pokemon_id 
-left join pokemon_egg_groups_view on pokemon_egg_groups_view.species_id = pokemon.id 
+left join pokemon_abilities_view on pokemon.id = pokemon_abilities_view.pokemon_id 
+left join pokemon_egg_groups_view on pokemon_egg_groups_view.pokemon_id = pokemon.id 
 left join pokemon_stats_view on pokemon_stats_view.pokemon_id = pokemon.id 
 left join pokemon_types_view on pokemon_types_view.pokemon_id = pokemon.id 
 left join pokemon_species on pokemon_species.id = pokemon.id
