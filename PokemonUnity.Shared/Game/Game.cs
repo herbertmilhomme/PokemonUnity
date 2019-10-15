@@ -18,7 +18,7 @@ using System.IO;
 /// During boot-up, game will check directory for save files and load data.
 /// Game class will overwrite all the other class default values when player triggers a load state.
 /// </summary>
-public partial class Game : UnityUtilityIntegration//: UnityEngine.MonoBehaviour//, UnityEngine.EventSystems.
+public partial class Game 
 {
 	//public static string GetFileGuid(string filepath)
 	//{
@@ -60,11 +60,11 @@ public partial class Game : UnityUtilityIntegration//: UnityEngine.MonoBehaviour
 	//if not the latest, perform an update by fetching and downloading latest info...
 	//else continue, and load the XML data into the variables
 
-	public FileStream LockFileStream (string filepath)
+	public string LockFileStream (string filepath)
 	{
 		UnicodeEncoding uniEncoding = new UnicodeEncoding();
-		int recordNumber = 13;
-		int byteCount = uniEncoding.GetByteCount(recordNumber.ToString());
+		//int recordNumber = 13;
+		//int byteCount = uniEncoding.GetByteCount(recordNumber.ToString());
 		string tempString;
 
 		using (FileStream fileStream = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
@@ -102,8 +102,11 @@ public partial class Game : UnityUtilityIntegration//: UnityEngine.MonoBehaviour
 			//		"file is locked.",
 			//		e.GetType().Name);
 			//}
-			finally { }
+			finally
+			{
+				//xmlString = tempString;
+			}
+			return tempString;
 		}
-		return new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
 	}
 }
