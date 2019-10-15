@@ -1466,7 +1466,7 @@ select
 	from "pokemon" as p
 	join "pokemon_types" as t on p.id = t.pokemon_id
 	group by p.id;
-CREATE VIEW pokemon_view as 
+CREATE VIEW pokemon_views as 
 select pokemon.id, pokemon.species_id, pokemon.identifier, pokemon.height, pokemon.weight, pokemon.base_experience, --pokemon."order"
 pokemon_abilities_view.ability1, pokemon_abilities_view.ability2, pokemon_abilities_view.ability3, 
 pokemon_egg_groups_view.egg_group1, pokemon_egg_groups_view.egg_group2,
