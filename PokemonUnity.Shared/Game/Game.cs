@@ -109,4 +109,81 @@ public partial class Game
 			return tempString;
 		}
 	}
+	public static List<string[]> GetArrayFromSQL(string sqlQuery/*, System.Type type*/)
+	{
+		try
+		{
+			//Step 1: Get Provider
+			//DbProviderFactory f = SQLiteFactory.Instance;
+			//Step 2: Create a connection
+			//IDbConnection con;// = f.CreateConnection();
+			//SqliteConnectionStringBuilder builder = new SqliteConnectionStringBuilder();
+			//builder.FailIfMissing = true;
+			//builder.Version = 3;
+			//builder.LegacyFormat = true;
+			//builder.Pooling = true;
+			string ConnectionString = "URI=file:" //"Data Source="//"Driver=SQLite3 ODBC Driver; Database="
+			//builder.Uri = "file:"
+			//builder.DataSource = "Data Source="
+			//builder.ConnectionString = "Driver=SQLite3 ODBC Driver; Database="
+				+ @"..\..\.." + Path.DirectorySeparatorChar
+				//+ System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase),"veekun-pokedex.sqlite");
+				//+ @"C:\Users\Username\Documents\Pokemon\Pokemon Unity\"//Assets\Resources\Databases"
+				//+ Application.dataPath + Path.DirectorySeparatorChar
+				//+ "Assets" + Path.DirectorySeparatorChar
+				//+ "Scripts" + Path.DirectorySeparatorChar
+				//+ "Resources" + Path.DirectorySeparatorChar
+				//+ "Databases" + Path.DirectorySeparatorChar
+				+ "veekun-pokedex.sqlite;Version=3;";// "Data Source=C:\\folder\
+				//+ "new_pokedex.db;Version=3;";// "Data Source=C:\\folder\\HelloWorld.sqlite;Version=3;New=False;Compress=True";
+			System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(ConnectionString);//ConnectionString
+			con.Open();
+
+			using (con)
+			{
+				//Step 3: Running a Command
+				System.Data.IDbCommand stmt = con.CreateCommand();
+
+				#region DataReader
+				stmt.CommandText = sqlQuery;
+				System.Data.IDataReader reader = stmt.ExecuteReader();
+
+				//Step 4: Read the results
+				using (reader)
+				{
+					//Dictionary<int, string[]> pairs = new Dictionary<int, string[]>();
+					////int[] y = Enum.GetValues(type);
+					//for (int n = 1; n <= Enum.GetValues(type).Length; n++)
+					//{
+					//}
+					int x = reader.FieldCount;
+					List<string[]> list = new List<string[]>();
+					while (reader.Read())
+					{
+						string[] a = new string[x];
+						for (int i = 0; i < x; i++)
+						{
+							a[i] = reader.GetString(i);
+						}
+						list.Add(a);
+					}
+					return list;
+				}
+				//Step 5: Closing up
+				reader.Close();
+				reader.Dispose();
+				#endregion
+				//return true;
+			}
+			con.Close();
+			//};
+		}
+		catch (System.Data.SqlClient.SqlException e)
+		{
+			//Debug.Log("SQL Exception Message:" + e.Message);
+			//Debug.Log("SQL Exception Code:" + e.ErrorCode.ToString());
+			//Debug.Log("SQL Exception Help:" + e.HelpLink);
+			return null;
+		}
+	}
 }

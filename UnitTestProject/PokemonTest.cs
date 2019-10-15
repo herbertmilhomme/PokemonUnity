@@ -12,6 +12,12 @@ namespace Tests
     {
         //Create 2 assert test; 1 for regular pokemon, and one for pokemon.NONE
         //Pokemon.NONE cannot receive any changes to data, as it does not exist...
+        [TestMethod]
+        public void Pokemon_Load_Test()
+        {
+			var s = Game.GetArrayFromSQL("select * from pokemon_views --order by id ASC");
+            CollectionAssert.AllItemsAreNotNull(s);
+        }
 
         [TestMethod]
         public void Pokemon_Name_Test()
@@ -578,7 +584,7 @@ namespace Tests
             //Convert GenderRatio to Male/Female Results
             //for loop, count to 100, if results is equal to or greater than threshold, fail
             Pokemons pkmn = Pokemons.BULBASAUR;
-            GenderRatio genders = Pokemon.PokemonData.GetPokemon(pkmn).MaleRatio;
+            GenderRatio genders = Pokemon.PokemonData.GetPokemon(pkmn).GenderEnum;
             int females = 0;
             //Confirm test criteria by making sure data fits
             if (genders == GenderRatio.FemaleOneEighth || !Pokemon.PokemonData.GetPokemon(pkmn).IsSingleGendered)

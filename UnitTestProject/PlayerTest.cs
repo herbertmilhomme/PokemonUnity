@@ -56,9 +56,9 @@ namespace Tests
 
             //bool?[] pokedex = new bool?[] { null, false, true, false, null };
             TimeSpan playerTime = new TimeSpan(4, 20, 53);
-			SeriV3 playerPosition = new SeriV3(0, 1, 0);
+			//SeriV3 playerPosition = new SeriV3(0, 1, 0);
             int playerDirection = 2;
-			SeriV3 followerPosition = new SeriV3(1, 0, 0);
+			//SeriV3 followerPosition = new SeriV3(1, 0, 0);
             int followerDirection = 1;
 			Pokemon[,] playerPC = Game.PC_Poke; //new Pokemon[Core.STORAGEBOXES, 30];
             //for (int i = 0; i < playerPC.GetLength(1); i++)
@@ -88,10 +88,10 @@ namespace Tests
 			};
 			List<Items> playerBag = Game.Bag_Items;
 
-			List<SaveEvent> eventList = new List<SaveEvent>();
-            eventList.Add(new SaveEvent(SaveEventType.ITEM, "Item - GreatBall", new SeriV3(4, 0, 2), 2));
-            eventList.Add(new SaveEvent(SaveEventType.ITEM, "Item - MasterBall", new SeriV3(4, 1, 9), 9));
-            eventList.Add(new SaveEvent(SaveEventType.ITEM, "Item - RareCandy", new SeriV3(2, 7, 3), 2));
+			//List<SaveEvent> eventList = new List<SaveEvent>();
+            //eventList.Add(new SaveEvent(SaveEventType.ITEM, "Item - GreatBall", new SeriV3(4, 0, 2), 2));
+            //eventList.Add(new SaveEvent(SaveEventType.ITEM, "Item - MasterBall", new SeriV3(4, 1, 9), 9));
+            //eventList.Add(new SaveEvent(SaveEventType.ITEM, "Item - RareCandy", new SeriV3(2, 7, 3), 2));
 
 			newSave = new SaveData
 			(
@@ -111,7 +111,7 @@ namespace Tests
 		
 				//pokedex: pokedex,
 				time: playerTime,
-				position: playerPosition,
+				//position: playerPosition,
 				direction: playerDirection,
 				//followerPosition,
 				//followerDirection,
@@ -120,9 +120,9 @@ namespace Tests
 		
 				party: red.Party.Serialize(), 
 				pc: new SeriPC(playerPC, new string[] { "Box 1", "Box 2" }, new int[] { 0, 1 }, new List<Item>()),
-				bag: playerBag,
+				bag: playerBag
 		
-				eventList: eventList
+				//,eventList: eventList
 			);
 			#endregion
 			//SaveManager.Overwrite(newSave, 0);
@@ -216,21 +216,21 @@ namespace Tests
             if (newSave.PlayerTime != loadedData.PlayerTime)
                 Assert.Fail("PlayerTimes are not the same");
 
-            if (
-                (newSave.PlayerPosition.x != loadedData.PlayerPosition.x) &&
-                (newSave.PlayerPosition.y != loadedData.PlayerPosition.y) &&
-                (newSave.PlayerPosition.z != loadedData.PlayerPosition.z)
-                )
-                Assert.Fail("PlayerPositions are not the same");
+            //if (
+            //    (newSave.PlayerPosition.x != loadedData.PlayerPosition.x) &&
+            //    (newSave.PlayerPosition.y != loadedData.PlayerPosition.y) &&
+            //    (newSave.PlayerPosition.z != loadedData.PlayerPosition.z)
+            //    )
+            //    Assert.Fail("PlayerPositions are not the same");
             if (newSave.PlayerDirection != loadedData.PlayerDirection)
                 Assert.Fail("PlayerDirections are not the same");
 
-            if (
-                (newSave.FollowerPosition.x != loadedData.FollowerPosition.x) &&
-                (newSave.FollowerPosition.y != loadedData.FollowerPosition.y) &&
-                (newSave.FollowerPosition.z != loadedData.FollowerPosition.z)
-                )
-                Assert.Fail("FollowerPositions are not the same");
+            //if (
+            //    (newSave.FollowerPosition.x != loadedData.FollowerPosition.x) &&
+            //    (newSave.FollowerPosition.y != loadedData.FollowerPosition.y) &&
+            //    (newSave.FollowerPosition.z != loadedData.FollowerPosition.z)
+            //    )
+            //    Assert.Fail("FollowerPositions are not the same");
             if (newSave.FollowerDirection != loadedData.FollowerDirection)
                 Assert.Fail("FollowerDirections are not the same");
 

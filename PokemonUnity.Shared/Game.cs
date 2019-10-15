@@ -422,7 +422,7 @@ public partial class Game : UnityUtilityIntegration//: UnityEngine.MonoBehaviour
 	#endregion
 
 	#region Audio 
-	public UnityEngine.Audio.AudioMixer audioMixer;
+	//public UnityEngine.Audio.AudioMixer audioMixer;
 	public static int? nextBattleBGM { get; set; }
 	public static int? nextBattleME { get; set; }
 	public static int? nextBattleBack { get; set; }
@@ -553,35 +553,36 @@ public class UnityUtilityIntegration
 				blocks &= ~b;
 		}
 
-		internal static float GetAxisRaw(string axis)
-		{
-			return blocks != Blocker.None ? 0.0f : UnityEngine.Input.GetAxisRaw(axis);
-		}
-
-		internal static bool GetKey(UnityEngine.KeyCode key)
-		{
-			return blocks != Blocker.None ? false : UnityEngine.Input.GetKey(key);
-		}
-
-		internal static bool GetKeyDown(UnityEngine.KeyCode key)
-		{
-			return blocks != Blocker.None ? false : UnityEngine.Input.GetKeyDown(key);
-		}
-
-		internal static bool GetMouseButton(int button)
-		{
-			return blocks != Blocker.None ? false : UnityEngine.Input.GetMouseButton(button);
-		}
-
-		internal static bool GetKeyUp(UnityEngine.KeyCode key)
-		{
-			return blocks != Blocker.None ? false : UnityEngine.Input.GetKeyUp(key);
-		}
+		//ToDo: Move to platform engine
+		//internal static float GetAxisRaw(string axis)
+		//{
+		//	return blocks != Blocker.None ? 0.0f : UnityEngine.Input.GetAxisRaw(axis);
+		//}
+		//
+		//internal static bool GetKey(UnityEngine.KeyCode key)
+		//{
+		//	return blocks != Blocker.None ? false : UnityEngine.Input.GetKey(key);
+		//}
+		//
+		//internal static bool GetKeyDown(UnityEngine.KeyCode key)
+		//{
+		//	return blocks != Blocker.None ? false : UnityEngine.Input.GetKeyDown(key);
+		//}
+		//
+		//internal static bool GetMouseButton(int button)
+		//{
+		//	return blocks != Blocker.None ? false : UnityEngine.Input.GetMouseButton(button);
+		//}
+		//
+		//internal static bool GetKeyUp(UnityEngine.KeyCode key)
+		//{
+		//	return blocks != Blocker.None ? false : UnityEngine.Input.GetKeyUp(key);
+		//}
 	}
 	#endregion
 
 	#region Unity Canvas UI
-	#region Resources
+	/*#region Resources
 	public static UnityEngine.Sprite[] LoadAllWindowSkinSprites()
 	{
 		return UnityEngine.Resources.LoadAll<UnityEngine.Sprite>(@"\Sprites\GUI\Frame\WindowSkin");
@@ -602,7 +603,7 @@ public class UnityUtilityIntegration
 	/// <summary>
 	/// Frame Style for all player and non-playable characters Speech bubbles
 	/// </summary>
-	public static UnityEngine.Sprite DialogSkinSprite { get { return LoadAllDialogSkinSprites()[Game.DialogSkin]; } }
+	public static UnityEngine.Sprite DialogSkinSprite { get { return LoadAllDialogSkinSprites()[Game.DialogSkin]; } }*/
 	/// <summary>
 	/// In-game UI dialog window to prompt message to user
 	/// </summary>
