@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS "pokemon_types" (
 	"type_id"	INTEGER NOT NULL,
 	"slot"	INTEGER NOT NULL,
 	PRIMARY KEY("pokemon_id","slot"),
+	UNIQUE("pokemon_id","slot"),
 	FOREIGN KEY("pokemon_id") REFERENCES "pokemon"("id"),
 	FOREIGN KEY("type_id") REFERENCES "types"("id")
 );
@@ -110,6 +111,7 @@ CREATE TABLE IF NOT EXISTS "pokemon_abilities" (
 	"is_hidden"	BOOLEAN NOT NULL,
 	"slot"	INTEGER NOT NULL,
 	PRIMARY KEY("pokemon_id","slot"),
+	UNIQUE("pokemon_id","slot"),
 	CHECK(is_hidden IN (0,1)),
 	FOREIGN KEY("pokemon_id") REFERENCES "pokemon"("id"),
 	FOREIGN KEY("ability_id") REFERENCES "abilities"("id")
@@ -120,6 +122,7 @@ CREATE TABLE IF NOT EXISTS "pokemon_stats" (
 	"base_stat"	INTEGER NOT NULL,
 	"effort"	INTEGER NOT NULL,
 	FOREIGN KEY("stat_id") REFERENCES "stats"("id"),
+	UNIQUE("pokemon_id","stat_id"),
 	PRIMARY KEY("pokemon_id","stat_id"),
 	FOREIGN KEY("pokemon_id") REFERENCES "pokemon"("id")
 );
@@ -212,8 +215,9 @@ CREATE TABLE IF NOT EXISTS "pokemon_dex_numbers" (
 	"species_id"	INTEGER NOT NULL,
 	"pokedex_id"	INTEGER NOT NULL,
 	"pokedex_number"	INTEGER NOT NULL,
-	FOREIGN KEY("pokedex_id") REFERENCES "pokedexes"("id"),
 	PRIMARY KEY("species_id","pokedex_id"),
+	UNIQUE("pokedex_id","pokedex_number"),
+	FOREIGN KEY("pokedex_id") REFERENCES "pokedexes"("id"),
 	FOREIGN KEY("species_id") REFERENCES "pokemon_species"("id")
 );
 CREATE TABLE IF NOT EXISTS "pokemon_species_prose" (
@@ -1090,7 +1094,7 @@ CREATE TABLE IF NOT EXISTS "move_effects" (
 CREATE TABLE IF NOT EXISTS "encounter_methods" (
 	"id"	INTEGER NOT NULL,
 	"identifier"	VARCHAR(79) NOT NULL UNIQUE,
-	"order"	INTEGER NOT NULL UNIQUE,
+	"order"	INTEGER NOT NULL,
 	PRIMARY KEY("id")
 );
 CREATE TABLE IF NOT EXISTS "contest_effects" (
@@ -1111,7 +1115,7 @@ CREATE TABLE IF NOT EXISTS "move_battle_styles" (
 );
 CREATE TABLE IF NOT EXISTS "regions" (
 	"id"	INTEGER NOT NULL,
-	"identifier"	VARCHAR(79) NOT NULL,
+	"identifier"	VARCHAR(79) NOT NULL UNIQUE,
 	PRIMARY KEY("id")
 );
 CREATE TABLE IF NOT EXISTS "languages" (
