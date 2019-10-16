@@ -13,10 +13,9 @@ namespace Tests
         //Create 2 assert test; 1 for regular pokemon, and one for pokemon.NONE
         //Pokemon.NONE cannot receive any changes to data, as it does not exist...
         [TestMethod]
-        public void Pokemon_Load_Test()
-        {
-			var s = Game.GetArrayFromSQL("select * from pokemon_views --order by id ASC");
-            CollectionAssert.AllItemsAreNotNull(s);
+        public void Initialize_Pokemon_Test()
+        {			
+			Assert.IsTrue(Game.InitPokemons());
         }
 
         [TestMethod]
@@ -206,7 +205,7 @@ namespace Tests
 		public void Pokemon_ChanceFor_HiddenAbility_If_Egg()
 		{
 			Pokemons pkmn = Pokemons.BULBASAUR;
-			Abilities Hidden = Pokemon.PokemonData.GetPokemon(pkmn).Ability[2];
+			Abilities Hidden = Game.PokemonData[pkmn].Ability[2];
             if (Hidden == Abilities.NONE)
             {
                 Assert.Fail("This pokemon does not have a hidden ability");
@@ -249,70 +248,70 @@ namespace Tests
             Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
             Assert.IsTrue(pokemon.countMoves() > 0);
         }
-        //[TestMethod]
-        //public void Pokemon_RNG_DefaultMoves_For_Egg()
-        //{
-        //	Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
-        //	if (!pokemon.isEgg) Assert.Fail("new Pokemon isnt an Egg");
-        //	Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
-        //	pokemon.GenerateMoveset();
-        //	Assert.AreNotSame(before,new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId });
-        //}
-        [TestMethod]
-        public void Pokemon_RNG_Moves_IsDifferent_For_HatchingEgg() //_At_Levels_GreaterThan_Zero
-        {
-            Pokemons pkmn = Pokemons.SQUIRTLE;
-            System.Collections.Generic.List<Moves> egg = new System.Collections.Generic.List<Moves>(); //ml.AddRange(pokemon.getMoveList(LearnMethod.egg));
-            System.Collections.Generic.List<Moves> lv = new System.Collections.Generic.List<Moves>(Pokemon.PokemonData.GetPokemon(pkmn).GetMoveList(LearnMethod.levelup));
-            foreach (Moves item in Pokemon.PokemonData.GetPokemon(pkmn).GetMoveList(LearnMethod.egg))
-            {
-                if (!lv.Contains(item)) egg.Add(item);
-            }
-            if (egg.Count < 1) Assert.Fail("Pokemon does not any contain egg-only move");
-            for (int i = 0; i < 10; i++)
-            {
-                Pokemon pokemon = new Pokemon(pkmn);
-                if (!pokemon.isEgg) Assert.Fail("new Pokemon isnt an Egg");
-                //Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
-                //pokemon.GenerateMoveset();
-                //Hatch Egg Here...
-                pokemon.HatchEgg();
-                //if(pokemon.Level <= 0) Assert.Fail("Pokemon is still level zero");
-                if (pokemon.isEgg) Assert.Fail("Pokemon is still an egg.");
-                foreach (Move move in pokemon.moves)
-                {
-                    if (move.MoveId != Moves.NONE &&
-                        (
-                            egg.Contains(move.MoveId)
-                        )
-                    )
-                        Assert.IsTrue(true, "Pokemon contains exclusive egg only move");
-                }
-                //Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
-                //pokemon.GenerateMoveset();
-            }
-            //Assert.AreNotSame(before,new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId });
-            //Assert.IsTrue if Pokemon.Move Contains exclusive egg-only moves.
-            Assert.Fail("Pokemon does not contain egg-only move");
-        }
-        //[TestMethod]
-        //public void Pokemon_Reseting_Moves_IsNotEqual()
-        //{
-        //	Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
-        //	Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
-        //	pokemon.resetMoves();
-        //	Assert.AreNotSame(before,new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId });
-        //}
-        /// <summary>
-        /// 
-        /// </summary>
-        /// ToDo: Resetting pokemon moves should randomly shuffle between all available that pokemon can possibly learn for their level
-        [TestMethod]
+		//[TestMethod]
+		//public void Pokemon_RNG_DefaultMoves_For_Egg()
+		//{
+		//	Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
+		//	if (!pokemon.isEgg) Assert.Fail("new Pokemon isnt an Egg");
+		//	Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
+		//	pokemon.GenerateMoveset();
+		//	Assert.AreNotSame(before,new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId });
+		//}
+		//[TestMethod]
+		//public void Pokemon_RNG_Moves_IsDifferent_For_HatchingEgg() //_At_Levels_GreaterThan_Zero
+		//{
+		//    Pokemons pkmn = Pokemons.SQUIRTLE;
+		//    System.Collections.Generic.List<Moves> egg = new System.Collections.Generic.List<Moves>(); //ml.AddRange(pokemon.getMoveList(LearnMethod.egg));
+		//    System.Collections.Generic.List<Moves> lv = new System.Collections.Generic.List<Moves>(Game.PokemonData[pkmn].GetMoveList(LearnMethod.levelup));
+		//    foreach (Moves item in Game.PokemonData[pkmn].GetMoveList(LearnMethod.egg))
+		//    {
+		//        if (!lv.Contains(item)) egg.Add(item);
+		//    }
+		//    if (egg.Count < 1) Assert.Fail("Pokemon does not any contain egg-only move");
+		//    for (int i = 0; i < 10; i++)
+		//    {
+		//        Pokemon pokemon = new Pokemon(pkmn);
+		//        if (!pokemon.isEgg) Assert.Fail("new Pokemon isnt an Egg");
+		//        //Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
+		//        //pokemon.GenerateMoveset();
+		//        //Hatch Egg Here...
+		//        pokemon.HatchEgg();
+		//        //if(pokemon.Level <= 0) Assert.Fail("Pokemon is still level zero");
+		//        if (pokemon.isEgg) Assert.Fail("Pokemon is still an egg.");
+		//        foreach (Move move in pokemon.moves)
+		//        {
+		//            if (move.MoveId != Moves.NONE &&
+		//                (
+		//                    egg.Contains(move.MoveId)
+		//                )
+		//            )
+		//                Assert.IsTrue(true, "Pokemon contains exclusive egg only move");
+		//        }
+		//        //Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
+		//        //pokemon.GenerateMoveset();
+		//    }
+		//    //Assert.AreNotSame(before,new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId });
+		//    //Assert.IsTrue if Pokemon.Move Contains exclusive egg-only moves.
+		//    Assert.Fail("Pokemon does not contain egg-only move");
+		//}
+		//[TestMethod]
+		//public void Pokemon_Reseting_Moves_IsNotEqual()
+		//{
+		//	Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
+		//	Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
+		//	pokemon.resetMoves();
+		//	Assert.AreNotSame(before,new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId });
+		//}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// ToDo: Resetting pokemon moves should randomly shuffle between all available that pokemon can possibly learn for their level
+		[TestMethod]
         public void Pokemon_RNG_Moves_NotEqual_PreviousMoves()
         {
             Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
             Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
-            pokemon.GenerateMoveset();
+            //pokemon.GenerateMoveset();
 			CollectionAssert.AreNotEqual(before, new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId });
         }
         [TestMethod]
@@ -343,7 +342,7 @@ namespace Tests
                 )
                     Assert.Fail();
                 //Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
-                pokemon.GenerateMoveset();
+                //pokemon.GenerateMoveset();
             }
             //Assert.Inconclusive();
             Assert.IsTrue(true);
@@ -355,12 +354,13 @@ namespace Tests
             int i = 0;
             while (pokemon.countMoves() == 4)
             {
-                pokemon.GenerateMoveset(); i++;
+                //pokemon.GenerateMoveset();
+				i++;
                 if (i > 5) Assert.Fail("Infinite Loop; Results Undetermined");
             }
             Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
 			bool suc;
-			pokemon.LearnMove(Moves.RAZOR_LEAF, out suc, true);
+			//pokemon.LearnMove(Moves.RAZOR_LEAF, out suc, true);
 			CollectionAssert.AreNotEqual(before, new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId });
         }
         [TestMethod]
@@ -373,12 +373,13 @@ namespace Tests
             int i = 0;
             while (pokemon.countMoves() == 4)
             {
-                pokemon.GenerateMoveset(); i++;
+                //pokemon.GenerateMoveset();
+				i++;
                 if (i > 25) Assert.Fail("Infinite Loop; Results Undetermined");
             }
             Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
 			bool suc;
-			pokemon.LearnMove(Moves.OVERHEAT, out suc);
+			//pokemon.LearnMove(Moves.OVERHEAT, out suc);
             CollectionAssert.AreEqual(before, new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId });
         }
         //[TestMethod]
@@ -397,12 +398,13 @@ namespace Tests
             int i = 0;
             while (pokemon.countMoves() != 4)
             {
-                pokemon.GenerateMoveset(); i++;
+                //pokemon.GenerateMoveset();
+				i++;
                 if (i > 1000) Assert.Fail("Infinite Loop; Results Undetermined");
             }
             Moves[] before = new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId };
             bool suc;
-			pokemon.LearnMove(Moves.TACKLE, out suc);
+			//pokemon.LearnMove(Moves.TACKLE, out suc);
 			CollectionAssert.AreEqual(before, new Moves[] { pokemon.moves[0].MoveId, pokemon.moves[1].MoveId, pokemon.moves[2].MoveId, pokemon.moves[3].MoveId });
         }
         [TestMethod]
@@ -415,11 +417,12 @@ namespace Tests
             int i = 0;
             while (pokemon.countMoves() == 4)
             {
-                pokemon.GenerateMoveset(); i++;
+                //pokemon.GenerateMoveset();
+				i++;
                 if (i > 15) Assert.Fail("Infinite Loop; Results Undetermined");
             }
 			bool suc;
-            pokemon.LearnMove(Moves.TACKLE, out suc);
+            //pokemon.LearnMove(Moves.TACKLE, out suc);
             int before = pokemon.countMoves();
             pokemon.DeleteMove(Moves.TACKLE);
             Assert.IsTrue(pokemon.countMoves() == before - 1);
@@ -435,15 +438,15 @@ namespace Tests
         //	//Loop thru all moves, make sure they're all present
         //	Assert.Inconclusive();
         //}
-        [TestMethod]
-        public void Pokemon_Return_MoveList_CanLearn_At_CurrentLevel()
-        {
-            //Pokemon pokemon = new Pokemon();
-            //Pokemon.PokemonData.GetPokemon(Pokemons.NONE).MoveTree.LevelUp.Where(x => x.Value <= this.Level).Select(x => x.Key)
-            //list of moves can learn at level
-            //Assert.AreSame(new Moves[] { }, new Pokemon().getMoveList());
-            Assert.IsTrue(new Pokemon(Pokemons.BULBASAUR, level: 25).getMoveList(LearnMethod.levelup).Length > 0);
-        }
+        //[TestMethod]
+        //public void Pokemon_Return_MoveList_CanLearn_At_CurrentLevel()
+        //{
+        //    //Pokemon pokemon = new Pokemon();
+        //    //Pokemon.PokemonData.GetPokemon(Pokemons.NONE).MoveTree.LevelUp.Where(x => x.Value <= this.Level).Select(x => x.Key)
+        //    //list of moves can learn at level
+        //    //Assert.AreSame(new Moves[] { }, new Pokemon().getMoveList());
+        //    Assert.IsTrue(new Pokemon(Pokemons.BULBASAUR, level: 25).getMoveList(LearnMethod.levelup).Length > 0);
+        //}
         //[TestMethod]
         //public void Pokemon_PokemonTest_CantLearn_Move_NotCompatible_With_TeachMethod()
         //{
@@ -456,17 +459,17 @@ namespace Tests
 
         #region Evolving/evolution
         //Use eevee to test different evolve code, as it's a perfect practice test
-        [TestMethod]
-        public void Pokemon_TestPokemon_CanEvolve()
-        {
-            Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
-            //Add exp
-            pokemon.Exp.AddExperience(50000);
-            //Assert is true
-            if (pokemon.hasEvolveMethod(EvolutionMethod.Level))
-                Assert.IsTrue(false);
-            else Assert.Fail("Unable to test if pokemon can evolve, as it does not have an evolution through leveling-up");
-        }
+        //[TestMethod]
+        //public void Pokemon_TestPokemon_CanEvolve()
+        //{
+        //    Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
+        //    //Add exp
+        //    pokemon.Exp.AddExperience(50000);
+        //    //Assert is true
+        //    if (pokemon.hasEvolveMethod(EvolutionMethod.Level))
+        //        Assert.IsTrue(false);
+        //    else Assert.Fail("Unable to test if pokemon can evolve, as it does not have an evolution through leveling-up");
+        //}
         [TestMethod]
         public void Pokemon_TestPokemon_EvolvePokemon()
         {
@@ -584,10 +587,10 @@ namespace Tests
             //Convert GenderRatio to Male/Female Results
             //for loop, count to 100, if results is equal to or greater than threshold, fail
             Pokemons pkmn = Pokemons.BULBASAUR;
-            GenderRatio genders = Pokemon.PokemonData.GetPokemon(pkmn).GenderEnum;
+            GenderRatio genders = Game.PokemonData[pkmn].GenderEnum;
             int females = 0;
             //Confirm test criteria by making sure data fits
-            if (genders == GenderRatio.FemaleOneEighth || !Pokemon.PokemonData.GetPokemon(pkmn).IsSingleGendered)
+            if (genders == GenderRatio.FemaleOneEighth || !Game.PokemonData[pkmn].IsSingleGendered)
             {
                 for (int i = 0; i < 100; i++)
                 {

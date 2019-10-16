@@ -241,7 +241,7 @@ namespace PokemonUnity.Saving
 			catch (FileNotFoundException)
 			{
 				//UnityEngine.Debug.Log("Couldn't find \"Save" + saveIndex + ".pku\".");
-				Game.DebugLog("Couldn't find \"Save" + saveIndex + ".pku\".");
+				//Game.DebugLog("Couldn't find \"Save" + saveIndex + ".pku\".");
 
 			}
 		}
@@ -295,7 +295,7 @@ namespace PokemonUnity.Saving
 							catch (Exception e)
 							{
 								//UnityEngine.Debug.Log(e.ToString());
-								Game.DebugLog(e.ToString());
+								//Game.DebugLog(e.ToString());
 							}
 						}
 					}

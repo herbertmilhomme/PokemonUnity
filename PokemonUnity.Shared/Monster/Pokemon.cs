@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PokemonUnity;
-using PokemonUnity.Monster;
 using PokemonUnity.Attack;
 using PokemonUnity.Inventory;
+using PokemonUnity.Monster;
+using PokemonUnity.Monster.Data;
 
 namespace PokemonUnity.Monster
 {
     public partial class Pokemon
     {
         #region Variables
+		private Pokemons pokemons { get; set; }
         /// <summary>
         /// Current Total HP
         /// </summary>
@@ -146,7 +148,7 @@ namespace PokemonUnity.Monster
                 if (eggSteps > 0 && value == 0)
                 {
                     this.Level = Core.EGGINITIALLEVEL;
-                    this.GenerateMoveset();
+                    //this.GenerateMoveset();
                 }
                 eggSteps =
                     //if egg hatch counter is going up in positive count
@@ -175,8 +177,9 @@ namespace PokemonUnity.Monster
         /// ToDo: None?
         public Items ballUsed { get; private set; }
         //public int[] EvolveLevels { get { return _base.Evolutions.} }
-        public IPokemonEvolution[] Evolutions { get { return _base.Evolutions; } }
-        protected PokemonData _base { get; private set; }
+        //public IPokemonEvolution[] Evolutions { get { return _base.Evolutions; } }
+        //protected PokemonData _base { get; private set; }
+        protected Data.PokemonData _base { get { return Game.PokemonData[pokemons]; } }
         /// <summary>
         /// Max total EVs
         /// </summary>
@@ -199,7 +202,8 @@ namespace PokemonUnity.Monster
         /// </summary>
         public Pokemon()
         {
-            _base = PokemonData.GetPokemon(Pokemons.NONE);
+            //_base = PokemonData.GetPokemon(Pokemons.NONE);
+			pokemons = Pokemons.NONE;
             PersonalId = Core.Rand.Next(256);
             PersonalId |= Core.Rand.Next(256) << 8;
             PersonalId |= Core.Rand.Next(256) << 16;
@@ -232,14 +236,16 @@ namespace PokemonUnity.Monster
         /// ToDo: Inherit PokemonData 
         public Pokemon(Pokemons pokemon) : this()
         {
-            _base = PokemonData.GetPokemon(pokemon);
+            //_base = PokemonData.GetPokemon(pokemon);
+			pokemons = pokemon;
             Exp = new Experience(GrowthRate);
 			TempLevel = Level;
 			eggSteps = _base.HatchTime;
             Ability = abilityFlag;
             Gender = gender; //GenderRatio.//Pokemon.PokemonData.GetPokemon(pokemon).MaleRatio
-			Item = (Items)_base.HeldItem[0,Core.pokemonGeneration];
-            GenerateMoveset();
+			//ToDo: Undo comment
+			//Item = (Items)_base.HeldItem[0,Core.pokemonGeneration];
+            //GenerateMoveset();
 
             //calcStats();
         }
@@ -264,7 +270,7 @@ namespace PokemonUnity.Monster
 		/// <param name="isEgg">Whether or not this pokemon is hatched; 
 		/// if pokemon <see cref="isEgg"/> is false, it loses benefits 
 		/// of learning egg moves</param>
-		public Pokemon(Pokemons pkmn, byte level, bool isEgg = false) : this(pkmn, isEgg) { Level = level; GenerateMoveset(); }
+		public Pokemon(Pokemons pkmn, byte level, bool isEgg = false) : this(pkmn, isEgg) { Level = level; /*GenerateMoveset();*/ }
 
 		//public Pokemon(Pokemons pkmn, byte loLevel, byte hiLevel, bool isEgg = false) : this(pkmn, isEgg) {  }
 
@@ -643,13 +649,13 @@ namespace PokemonUnity.Monster
             private set
             {
                 if (value < 1 || value > 100) //Experience.MAXLEVEL
-                    Game.DebugLog(string.Format("The level number {0} is invalid", value), true);
+                    //Game.DebugLog(string.Format("The level number {0} is invalid", value), true);
                 if (value > this.Level)
                     this.Exp.AddExperience(Experience.GetStartExperience(this.GrowthRate, value) - this.Exp.Current);
                 else
                 {
                     //ToDo: Not Designed to go backwards yet...
-                    Game.DebugLog(string.Format("The level number {0} is invalid", value), true);
+                    //Game.DebugLog(string.Format("The level number {0} is invalid", value), true);
                 }
             }
 		}
@@ -694,9 +700,9 @@ namespace PokemonUnity.Monster
 				//this.Heal(HPDifference);
 				HP += HPDifference;
 
-			if (LearnRandomAttack)
-				//this.LearnAttack(this.Level);
-				LearnMove(TempLevel);
+			//if (LearnRandomAttack)
+			//	//this.LearnAttack(this.Level);
+			//	LearnMove(TempLevel);
 		}
 
 		public bool isEgg
@@ -746,7 +752,8 @@ namespace PokemonUnity.Monster
         #endregion
 
         #region Evolution
-        /// <summary>
+        /* ToDo: Fix this block
+		/// <summary>
         /// Returns an array of all the levels this pokemons has to reach in order to evolve into species.
         /// Best if used in combination with <see cref="CanEvolveDuringBattle"/>.
         /// </summary>
@@ -762,7 +769,7 @@ namespace PokemonUnity.Monster
                         evolution.EvolveMethod == EvolutionMethod.LevelMale ||
                         evolution.EvolveMethod == EvolutionMethod.LevelFemale)
                     {
-                        levels.Add((evolution as Pokemon.PokemonData.PokemonEvolution<int>).EvolveValue);
+                        levels.Add((evolution as Data.PokemonEvolution<int>).EvolveValue);
                     }
                 }
                 if (levels.Count == 0)// && _base.Evolutions.Length > 0
@@ -840,7 +847,7 @@ namespace PokemonUnity.Monster
                     return true;
             }
             return false;
-        }
+        }*/
         #endregion
 
         #region Gender
@@ -1200,7 +1207,7 @@ namespace PokemonUnity.Monster
 
         public bool knowsMove(Moves move) { return this.hasMove(move); }
 
-        /// <summary>
+        /*// <summary>
         /// Returns the list of moves this Pokémon can learn by training method.
         /// </summary>
         public Moves[] getMoveList(LearnMethod? method = null)
@@ -1226,13 +1233,13 @@ namespace PokemonUnity.Monster
                     list.AddRange(_base.MoveTree.Egg);
                     list.AddRange(_base.MoveTree.Machine.Where(x => !list.Contains(x)).Select(x => x));
                     list.AddRange(_base.MoveTree.Tutor.Where(x => !list.Contains(x)).Select(x => x));
-                    list.AddRange(_base.MoveTree.LevelUp.Where(x => !list.Contains(x.Key))/*(x => x.Value <= this.Level)*/.Select(x => x.Key));
+                    list.AddRange(_base.MoveTree.LevelUp.Where(x => !list.Contains(x.Key))//(x => x.Value <= this.Level)
+						.Select(x => x.Key));
                     return list.ToArray();
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="level"></param>
         /// ToDo: Higher the pokemon's level, the greater the chances of generating a full moveset (4 moves)
@@ -1359,12 +1366,12 @@ namespace PokemonUnity.Monster
         /// </summary>
         public void resetMoves()
         {
-            /*for (int i = 0; i < _base.MoveSet.Length; i++){//foreach(var i in _base.MoveSet)
-                if (_base.MoveSet[i].Level <= this.Level)
-                {
-                    movelist.Add(_base.MoveSet[i].MoveId);
-                }
-            }*/
+            //for (int i = 0; i < _base.MoveSet.Length; i++){//foreach(var i in _base.MoveSet)
+            //    if (_base.MoveSet[i].Level <= this.Level)
+            //    {
+            //        movelist.Add(_base.MoveSet[i].MoveId);
+            //    }
+            //}
             for (int i = 0; i < 4; i++)
             {
                 this.moves[i] = new Move((i >= firstMoves.Count) ? 0 : firstMoves[i]);
@@ -1386,19 +1393,19 @@ namespace PokemonUnity.Monster
                 Game.DebugLog("Move is not compatible");
                 return;
             }
-            /*for (int i = 0; i < 4; i++) {
-                if (moves[i].MoveId == move) { //Switch ordering of moves?
-                    int j = i + 1;
-                    while (j < 4) {
-                        if (moves[j].MoveId == 0) break;
-                        Move tmp = moves[j];
-                        moves[j] = moves[j - 1];
-                        moves[j - 1] = tmp;
-                        j += 1;
-                    }
-                    return;
-                }
-            }*/
+            //for (int i = 0; i < 4; i++) {
+            //    if (moves[i].MoveId == move) { //Switch ordering of moves?
+            //        int j = i + 1;
+            //        while (j < 4) {
+            //            if (moves[j].MoveId == 0) break;
+            //            Move tmp = moves[j];
+            //            moves[j] = moves[j - 1];
+            //            moves[j - 1] = tmp;
+            //            j += 1;
+            //        }
+            //        return;
+            //    }
+            //}
             if (hasMove(move))
             {
                 Game.DebugLog("Already knows move...");
@@ -1462,7 +1469,7 @@ namespace PokemonUnity.Monster
 				else
 					break;
 			}
-		}
+		}*/
 
         /// <summary>
         /// Deletes the given move from the Pokémon.
@@ -2084,7 +2091,7 @@ namespace PokemonUnity.Monster
         /// Nickname; 
         /// Returns Pokemon species name if not nicknamed.
         /// </summary>
-        public virtual string Name { get { if (this.EggSteps > 0) return "Egg"; return name ?? _base.Name; } }
+        public virtual string Name { get { if (this.EggSteps > 0) return "Egg"; return name ?? string.Empty;/*_base.Name;*/ } } //ToDo: Fix this
 
         /// <summary>
         ///	Used only for a few pokemon to specify what form it's in. 
@@ -2120,17 +2127,12 @@ namespace PokemonUnity.Monster
         /// Some forms have a SpeciesId and others are battle only
         /// Note: All of the forms appear to be registered as Enums already...
         /// Why not just change from `INT` to `(enum)Pokemons`?
-        public int Form { get { return _base.Form; } set { if (value >= 0 && value <= _base.Forms) _base.Form = value; } }
+        public int Form { get; set; }//{ get { return _base.Form; } set { if (value >= 0 && value <= _base.Forms) _base.Form = value; } }
 
-        /// <summary>
+        /*// <summary>
         /// Returns the species name of this Pokemon
         /// </summary>
-        /*// <returns></returns>
-        public string SpeciesName()
-        {
-            return _base.getName();
-        }*/
-        public string SpeciesName { get { return this._base.Species; } }
+        public string SpeciesName { get { return this._base.Species; } }*/
 
         /// <summary>
         /// Returns the markings this Pokemon has
