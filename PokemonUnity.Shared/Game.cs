@@ -103,7 +103,11 @@ public partial class Game
 	#region Constructor
 	static Game()
 	{
-		con.Open(); //ToDo: Move to public Constructor
+		//ToDo: Move to public Constructor
+		#region Public Constructor
+		con.Open();
+		InitPokemons();
+		#endregion
 		//GameDebug.Init(null, "GameTestLog");
 		//if(LoadInitFile())
 		//{		

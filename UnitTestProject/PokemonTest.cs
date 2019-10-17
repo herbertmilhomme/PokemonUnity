@@ -10,14 +10,15 @@ namespace Tests
     [TestClass]
     public class PokemonTest
     {
-        //Create 2 assert test; 1 for regular pokemon, and one for pokemon.NONE
-        //Pokemon.NONE cannot receive any changes to data, as it does not exist...
         [TestMethod]
         public void Initialize_Pokemon_Test()
-        {			
+        {		
+			//Only good if this function is ran first before any others
 			Assert.IsTrue(Game.InitPokemons());
         }
 
+        //Create 2 assert test; 1 for regular pokemon, and one for pokemon.NONE
+        //Pokemon.NONE cannot receive any changes to data, as it does not exist...
         [TestMethod]
         public void Pokemon_Name_Test()
         {

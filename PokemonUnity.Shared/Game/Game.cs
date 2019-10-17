@@ -188,8 +188,8 @@ public partial class Game
 			//System.Data.SQLite.SQLiteConnection con = new System.Data.SQLite.SQLiteConnection(ConnectionString);//ConnectionString
 			//con.Open();
 
-			using (con)
-			{
+			//using (con)
+			//{
 				//Step 3: Running a Command
 				System.Data.SQLite.SQLiteCommand stmt = con.CreateCommand();
 
@@ -223,8 +223,8 @@ public partial class Game
 				reader.Dispose();
 				#endregion
 				//return true;
-			}
-			con.Close();
+			//}
+			//con.Close();
 			//};
 		}
 		catch (System.Data.SqlClient.SqlException e)
