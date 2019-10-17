@@ -17,6 +17,12 @@ namespace Tests
 			Assert.IsTrue(Game.InitPokemons());
         }
 
+        [TestMethod]
+        public void Pokemon_Data_IsLoaded()
+        {
+			Assert.IsTrue(Game.PokemonData.Count > 1);
+        }
+
         //Create 2 assert test; 1 for regular pokemon, and one for pokemon.NONE
         //Pokemon.NONE cannot receive any changes to data, as it does not exist...
         [TestMethod]

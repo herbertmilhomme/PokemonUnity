@@ -178,6 +178,7 @@ public partial class Game
 				//Step 4: Read the results
 				using(reader)
 				{
+					PokemonData.Add(Pokemons.NONE, new Monster.Data.PokemonData());
 					while(reader.Read()) //if(reader.Read())
 					{
 						PokemonData.Add((Pokemons)int.Parse((string)reader["id"].ToString()),
