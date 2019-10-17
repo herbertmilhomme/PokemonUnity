@@ -902,7 +902,7 @@ namespace PokemonUnity.Monster
                 default:
                     //byte n = (byte)(Core.Rand.Next(0, 100) + 1);
                     double n = (Core.Rand.NextDouble() * 100) + 1;
-                    if (_base.GenderEnum == GenderRatio.AlwaysFemale && n > 0f && n < 12.5f) return false;
+                    if		(_base.GenderEnum == GenderRatio.AlwaysFemale && n > 0f && n < 12.5f) return false;
                     else if (_base.GenderEnum == GenderRatio.FemaleSevenEighths && n >= 12.5f && n < 25f) return false;
                     else if (_base.GenderEnum == GenderRatio.Female75Percent && n >= 25f && n < 37.5f) return false;
                     else if (_base.GenderEnum == GenderRatio.Female75Percent && n >= 37.5f && n < 50f) return false;

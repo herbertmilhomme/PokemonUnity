@@ -243,6 +243,7 @@ namespace Tests
         {
             //All EV points when added together cannot be greater than a sum of MaxEVLimit
             Pokemon pokemon = new Pokemon();
+			//Add PP till max is hit, and add together and compare total
             int ev = pokemon.EV[0] + pokemon.EV[1] + pokemon.EV[2] + pokemon.EV[3] + pokemon.EV[4] + pokemon.EV[5];
             Assert.AreEqual(Pokemon.EVLIMIT, ev);
         }
@@ -589,7 +590,7 @@ namespace Tests
         //}
 
         [TestMethod]
-        public void Pokemon_GenderRatio_NotSingleGendered()
+        public void Pokemon_GenderRatio_OneEighthFemale()
         {
             //Convert GenderRatio to Male/Female Results
             //for loop, count to 100, if results is equal to or greater than threshold, fail
@@ -604,7 +605,7 @@ namespace Tests
                     Pokemon pokemon = new Pokemon(pkmn);
                     if (pokemon.Gender.HasValue && !pokemon.Gender.Value) females++;
                 }
-                Assert.IsTrue(100 - females < 100 - 18); //12.5 is 1/8th 
+                Assert.IsTrue(100 - females > 100 - 18); //12.5 is 1/8th 
             }
             else
                 Assert.Fail("Testing for gender ratio of {0}; but pokemon gender chances are {1}", "One-Eighth Percent Females", genders.ToString());
