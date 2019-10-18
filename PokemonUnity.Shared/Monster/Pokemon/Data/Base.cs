@@ -164,46 +164,6 @@ namespace PokemonUnity.Monster.Data
         #endregion
 
         #region Constructors
-        //public PokemonData() { }// this.name = PokemonData.GetPokedexTranslation(this.ID).Forms[this.Form] ?? this.Name; } //name equals form name unless there is none.
-        //public PokemonData(Pokemons Id) //: this()
-        //{
-        //    //PokedexTranslation translation = PokemonData.GetPokedexTranslation(Id);
-        //    //var translation = Id.ToString().Translate();
-        //    this.ID = Id;
-        //    //this.name = translation.Name;
-        //    //this.species = translation.Species;
-        //    //this.pokedexEntry = translation.PokedexEntry;
-        //    /*this.PokedexEntry = translation.Value.Trim('\n');
-        //    //this.forms = forms; //| new Pokemon[] { Id }; //ToDo: need new mechanic for how this should work
-        //    List<string> formvalues = new List<string>();
-        //    foreach (var fieldValue in translation.FieldNames)
-        //    {
-        //        //fieldnames.Add(field);
-        //        if (fieldValue.Key.Contains("form"))
-        //        {
-        //            //_dictionary.Dictionaries[Core.UserLanguage.ToString()][text].Value = string.Format(_dictionary.Dictionaries[Core.UserLanguage.ToString()][text].Value, fieldnames.ToArray());//(_dictionary.Dictionaries[Core.UserLanguage.ToString()][text].Value, _dictionary.Dictionaries[Core.UserLanguage.ToString()][text].FieldNames)
-        //            //_dictionary.Dictionaries[Core.UserLanguage.ToString()][text].Value = fieldnames.Where() .JoinAsString("; ") +"\n"+ _dictionary.Dictionaries[Core.UserLanguage.ToString()][text].Value;//(_dictionary.Dictionaries[Core.UserLanguage.ToString()][text].Value, _dictionary.Dictionaries[Core.UserLanguage.ToString()][text].FieldNames)
-        //            formvalues.Add(fieldValue.Value);
-        //        }
-        //        if (fieldValue.Key.Contains("genus"))
-        //        {
-        //            this.Species = fieldValue.Value;
-        //        }
-        //        if (fieldValue.Key.Contains("name"))
-        //        {
-        //            this.name = fieldValue.Value ?? translation.Identifier;
-        //        }
-        //    }
-        //    if (formvalues.Count != 0)
-        //    {
-        //        this.forms = formvalues.ToArray();
-        //    }
-        //    else
-        //    {
-        //        this.forms = new string[] { null };
-        //    }*/
-        //}
-
         public PokemonData(Pokemons Id = Pokemons.NONE, int[] regionalDex = null, 
                             Types type1 = Types.NONE, Types type2 = Types.NONE, Abilities ability1 = Abilities.NONE, Abilities ability2 = Abilities.NONE, Abilities hiddenAbility = Abilities.NONE,//Abilities[] abilities,
                             GenderRatio? genderRatio = GenderRatio.Genderless, float? maleRatio = null, int catchRate = 1, EggGroups eggGroup1 = EggGroups.NONE, EggGroups eggGroup2 = EggGroups.NONE, int hatchTime = 0,
@@ -232,10 +192,6 @@ namespace PokemonUnity.Monster.Data
             this.ability2 = (Abilities)ability2;
             this.abilityh = (Abilities)hiddenAbility;
 
-			if (genderRatio.HasValue)
-				this.GenderEnum = genderRatio.Value;
-			else this.GenderEnum = GenderRatio.Genderless;
-            //this.GenderEnum = maleRatio.HasValue ? getGenderRatio(maleRatio.Value) : GenderRatio.Genderless; //genderRatio.Value;
             this.CatchRate = catchRate;
             this.eggGroup1 = eggGroup1;
             this.eggGroup2 = eggGroup2;
@@ -293,6 +249,12 @@ namespace PokemonUnity.Monster.Data
 			this.GenerationId 	= generationId 	;
 			this.HabitatId 		= habitatId 	;
 			this.ShapeId 		= shapeId 		;
+
+			this.GenderEnum = GenderRatio.Genderless;
+			if (genderRatio.HasValue)
+				this.GenderEnum = genderRatio.Value;
+			else 
+				this.GenderEnum = maleRatio.HasValue ? getGenderRatio(maleRatio.Value) : GenderEnum; //genderRatio.Value;
 		}
 		#endregion
 

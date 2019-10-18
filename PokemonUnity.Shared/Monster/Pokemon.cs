@@ -233,7 +233,6 @@ namespace PokemonUnity.Monster
         /// Uses PokemonData to initialize a Pokemon from base stats
         /// </summary>
         /// <param name="pokemon"></param>
-        /// ToDo: Inherit PokemonData 
         public Pokemon(Pokemons pokemon) : this()
         {
             //_base = PokemonData.GetPokemon(pokemon);
@@ -372,8 +371,9 @@ namespace PokemonUnity.Monster
             else
                 name = null;
 
-            Form = form;
-            //_base = Pokemon.PokemonData.GetPokemon(species);
+			//_base = Pokemon.PokemonData.GetPokemon(species);
+			pokemons = species;
+			Form = form;
 
             Ability = ability;
             natureFlag = new Nature(nature);
@@ -396,6 +396,7 @@ namespace PokemonUnity.Monster
 
             ObtainLevel = obtainedLevel;
             //Level = currentLevel;
+			//ToDo: Load exp without triggering a level-up scene
             Exp.AddExperience(currentExp - Exp.Current);
 			TempLevel = Level;
 

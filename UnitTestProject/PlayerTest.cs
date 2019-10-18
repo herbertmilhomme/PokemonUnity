@@ -273,19 +273,19 @@ namespace Tests
         public void Player_Name_Not_Null()
         {
             //Player trainer = new Player();
-            Assert.Fail("No Player Test");
+            Assert.Inconclusive("No Player Test");
         }
         [TestMethod]
         public void Player_Badge_Count()
         {
             //Player trainer = new Player();
-            Assert.Fail("No Player Test");
+            Assert.Inconclusive("No Player Test");
         }
         [TestMethod]
         public void Player_Badge_ShouldEqual_GymIsDefeated()
         {
             //Player trainer = new Player();
-            Assert.Fail("No Player Test");
+            Assert.Inconclusive("No Player Test");
         }
         [TestMethod] //ToDo: Maybe this test should be duplicated on TrainerTest too
         public void Player_Party_NotNull()
@@ -293,26 +293,26 @@ namespace Tests
             //Player trainer = new Player();
             //Null party is not the same thing as Pokemon.NONE. 
             //Party should be six Pokemons(type) regardless of value, just not null
-            Assert.Fail("No Player Test");
+            Assert.Inconclusive("No Player Test");
         }
         [TestMethod] //Maybe Simulate a battle, and see if number changes? Seen/Caught
         public void Player_Pokedex_Count()
         {
             //Player trainer = new Player();
-            Assert.Fail("No Player Test");
+            Assert.Inconclusive("No Player Test");
         }
         [TestMethod]
         public void Player_HoursPlayed_NotNull()
         {
             //Player trainer = new Player();
-            Assert.Fail("No Player Test");
+            Assert.Inconclusive("No Player Test");
         }
         [TestMethod]
         public void Player_HoursPlayed_Test()
         {
             //Player trainer = new Player();
             //ToDo: System.Timer, create a player, wait a while, test again and see if it changes?
-            Assert.Fail("No Player Test");
+            Assert.Inconclusive("No Player Test");
         }
         #endregion
 
@@ -433,6 +433,7 @@ namespace Tests
 
             Assert.AreEqual(expectedTimeSpan, newSave.PlayerTime);
         }
+
 		#region Game Settings (different from Player Settings)
 		//ToDo: One of these should be good enough... 
 		// i dont think we need each variable to pass
