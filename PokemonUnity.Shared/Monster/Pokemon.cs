@@ -648,9 +648,9 @@ namespace PokemonUnity.Monster
             }
             private set
             {
-                if (value < 1 || value > 100) //Experience.MAXLEVEL
+                if (value < 1 || value > 100) {//Experience.MAXLEVEL
                     //Game.DebugLog(string.Format("The level number {0} is invalid", value), true);
-                if (value > this.Level)
+                } if (value > this.Level)
                     this.Exp.AddExperience(Experience.GetStartExperience(this.GrowthRate, value) - this.Exp.Current);
                 else
                 {
