@@ -1484,7 +1484,7 @@ left join pokemon_types_view on pokemon_types_view.pokemon_id = pokemon.id
 left join pokemon_species on pokemon_species.id = pokemon.id
 left join pokemon_colors on pokemon_colors.id = pokemon_species.color_id
 left join pokemon_color_names on pokemon_color_names.pokemon_color_id=pokemon_colors.id AND pokemon_color_names.local_language_id=9
-left join pokemon_species_names on pokemon_species_names.pokemon_species_id = pokemon.id AND pokemon_species_names.local_language_id=9
-left join pokemon_species_flavor_text on pokemon_species_flavor_text.species_id = pokemon.id AND pokemon_species_flavor_text.version_id=26 AND pokemon_species_flavor_text.language_id=9
+left join pokemon_species_names on pokemon_species_names.pokemon_species_id = pokemon.species_id AND pokemon_species_names.local_language_id=9
+left join pokemon_species_flavor_text on pokemon_species_flavor_text.species_id = pokemon.species_id AND pokemon_species_flavor_text.version_id=26 AND pokemon_species_flavor_text.language_id=9
 order by pokemon.id ASC;
 COMMIT;
