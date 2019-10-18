@@ -663,7 +663,8 @@ namespace PokemonUnity.Monster
 		/// Actual pokemon level is calaculated with <see cref="this.Level"/>.
 		/// This is just a temp placeholder for Leveling-Up mechanic.
 		/// </summary>
-		public int TempLevel { get; private set; }
+		/// ToDo: Move to platform engine
+		public int TempLevel { get; private set; } 
 
 		/// <summary>
 		/// Gives the Pokémon experience points and levels it up.

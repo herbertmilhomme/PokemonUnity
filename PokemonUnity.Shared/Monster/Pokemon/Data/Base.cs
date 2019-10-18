@@ -204,12 +204,12 @@ namespace PokemonUnity.Monster.Data
         //    }*/
         //}
 
-        public PokemonData(Pokemons Id = Pokemons.NONE, int[] regionalDex = null, //string name, 
+        public PokemonData(Pokemons Id = Pokemons.NONE, int[] regionalDex = null, 
                             Types type1 = Types.NONE, Types type2 = Types.NONE, Abilities ability1 = Abilities.NONE, Abilities ability2 = Abilities.NONE, Abilities hiddenAbility = Abilities.NONE,//Abilities[] abilities,
-                            GenderRatio? genderRatio = null, float? maleRatio = null, int catchRate = 1, EggGroups eggGroup1 = EggGroups.NONE, EggGroups eggGroup2 = EggGroups.NONE, int hatchTime = 0,
+                            GenderRatio? genderRatio = GenderRatio.Genderless, float? maleRatio = null, int catchRate = 1, EggGroups eggGroup1 = EggGroups.NONE, EggGroups eggGroup2 = EggGroups.NONE, int hatchTime = 0,
                             float height = 0f, float weight = 0f, int baseExpYield = 0, LevelingRate levelingRate = LevelingRate.MEDIUMFAST,
                             int evHP = 0, int evATK = 0, int evDEF = 0, int evSPA = 0, int evSPD = 0, int evSPE = 0,
-                            Color pokedexColor = Color.NONE, int baseFriendship = 0,// string species, string pokedexEntry,
+                            Color pokedexColor = Color.NONE, int baseFriendship = 0,
                             int baseStatsHP = 0, int baseStatsATK = 0, int baseStatsDEF = 0, int baseStatsSPA = 0, int baseStatsSPD = 0, int baseStatsSPE = 0,
                             Rarity rarity = Rarity.Common, float luminance = 0f,
                             PokemonMoveset[] movesetmoves = null,
@@ -232,10 +232,10 @@ namespace PokemonUnity.Monster.Data
             this.ability2 = (Abilities)ability2;
             this.abilityh = (Abilities)hiddenAbility;
 
-			//if (genderRatio.HasValue) 
-				this.GenderEnum = genderRatio.Value; 
-			//else
-            //this.GenderEnum = maleRatio.HasValue ? getGenderRatio(maleRatio.Value) : getGenderRatio(-1); //genderRatio.Value;
+			if (genderRatio.HasValue)
+				this.GenderEnum = genderRatio.Value;
+			else this.GenderEnum = GenderRatio.Genderless;
+            //this.GenderEnum = maleRatio.HasValue ? getGenderRatio(maleRatio.Value) : GenderRatio.Genderless; //genderRatio.Value;
             this.CatchRate = catchRate;
             this.eggGroup1 = eggGroup1;
             this.eggGroup2 = eggGroup2;
