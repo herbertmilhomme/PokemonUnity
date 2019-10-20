@@ -12,7 +12,7 @@ namespace PokemonUnity.Monster.Data
     /// <summary>
     /// The moves that all Pokémon of the species learn as they level up. 
     /// </summary>
-    public class PokemonMoveset
+    public struct PokemonMoveset
     {
         public LearnMethod TeachMethod;
         /// <summary>
@@ -30,23 +30,14 @@ namespace PokemonUnity.Monster.Data
         /// Move learned upon leveling-up
         /// </summary>
         public Moves MoveId;
-        public int Generation;
-        //public PokemonMoveset() { }
-        /*public PokemonMoveset(Move.MoveData.Move move, int level)
-        {
-            this.Level = level;
-            this.MoveId = move;
-        }
-        public PokemonMoveset(Move.MoveData.Move move)
-        {
-            this.MoveId = move;
-        }*/
+        //public int Generation;
         public PokemonMoveset(Moves moveId, LearnMethod method = LearnMethod.levelup, int level = 0, int? generation = null) //: this()
         {
             this.Level = level;
             this.MoveId = moveId;
             this.TeachMethod = method;
-            if (generation != null) this.Generation = generation.Value;
+			//if (generation.HasValue) this.Generation = generation.Value;
+			//else this.Generation = 0;
         }
     }
 }

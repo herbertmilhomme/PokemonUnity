@@ -106,6 +106,7 @@ public partial class Game
 		//ToDo: Move to public Constructor
 		#region Public Constructor
 		con.Open();
+		InitPokemonMoves();
 		InitPokemons();
 		#endregion
 		//GameDebug.Init(null, "GameTestLog");

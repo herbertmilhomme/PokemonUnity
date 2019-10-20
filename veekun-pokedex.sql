@@ -1492,16 +1492,26 @@ select move_id, group_concat(move_flag_id) as move_flag_group
 from move_flag_map 
 group by move_id;
 CREATE VIEW move_views as 
-select moves.id, moves.identifier, moves.generation_id, moves.type_id, moves.power, moves.pp, moves.accuracy, moves.priority, moves.target_id, moves.damage_class_id, moves.effect_id, moves.effect_chance, moves.contest_type_id, moves.contest_effect_id, moves.super_contest_effect_id
-move_meta.meta_category_id, move_meta.meta_ailment_id, move_meta.min_hits, move_meta.max_hits, move_meta.min_turns, move_meta.max_turns, move_meta.drain, move_meta.healing, move_meta.crit_rate, move_meta.ailment_chance, move_meta.flinch_chance, move_meta.stat_chance 
-move_flags.identifier as move_flag,
+select moves.id, moves.identifier, moves.generation_id, moves.type_id, moves.power, moves.pp, moves.accuracy, moves.priority, moves.target_id, moves.damage_class_id, moves.effect_id, moves.effect_chance, moves.contest_type_id, moves.contest_effect_id, moves.super_contest_effect_id,
+move_meta.meta_category_id, move_meta.meta_ailment_id, move_meta.min_hits, move_meta.max_hits, move_meta.min_turns, move_meta.max_turns, move_meta.drain, move_meta.healing, move_meta.crit_rate, move_meta.ailment_chance, move_meta.flinch_chance, move_meta.stat_chance,
+--move_flags.identifier as move_flag,
 move_flag_map_view.move_flag_group,
 move_effect_prose.short_effect, move_effect_prose.effect,
 --move_flag_prose.name as flag_name, move_flag_prose.description as flag_description,
 move_targets.identifier as target_identifier,
-move_target_prose.name as target_name, move_target_prose.description as target_description
+move_target_prose.name as target_name, move_target_prose.description as target_description,
 move_names.name,
-move_flavor_text.flavor_text,
+move_flavor_text.flavor_text
+from moves
+left join move_flag_map_view on move_flag_map_view.move_id = moves.id 
+--left join move_flags on move_flags.id = moves.id 
+left join move_meta on move_meta.move_id = moves.id
+left join move_targets on move_targets.id = moves.target_id
+left join move_target_prose on move_target_prose.move_target_id=move_targets.id AND move_target_prose.local_language_id=9
+left join move_effect_prose on move_effect_prose.move_effect_id = moves.effect_id AND move_effect_prose.local_language_id=9
+left join move_names on move_names.move_id = moves.id AND move_names.local_language_id=9
+left join move_flavor_text on move_flavor_text.move_id = moves.id AND move_flavor_text.version_group_id=18 AND move_flavor_text.language_id=9
+order by moves.id ASC;
 from moves
 left join move_flag_map_view on move_flag_map_view.move_id = moves.id 
 left join move_meta on move_meta.move_id = moves.id

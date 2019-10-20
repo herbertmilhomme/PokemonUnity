@@ -29,6 +29,7 @@ public partial class Game
 {
 	const string FilePokemonXML = "";
 	//ToDo: ReadOnly Immutable Dictionaries...
+	public static Dictionary<Pokemons, PokemonUnity.Monster.Data.PokemonMoveset[]> PokemonMovesData { get; private set; }
 	public static Dictionary<Pokemons, PokemonUnity.Monster.Data.PokemonData> PokemonData { get; private set; }
 	//public static Dictionary<Moves,Move.MoveData> MoveData { get; private set; }
 	//public static Dictionary<Items,Item> ItemData { get; private set; }
@@ -49,6 +50,71 @@ public partial class Game
 		else return GetPokemonsFromXML();
 	}
 
+	public static bool InitPokemonMoves(bool sql = true)
+	{
+		PokemonMovesData = new Dictionary<Pokemons, Monster.Data.PokemonMoveset[]>();
+		if (sql) //using (con)
+			return GetPokemonMovesFromSQL(con);
+		else return GetPokemonsFromXML();
+	}
+
+	static bool GetPokemonMovesFromSQL(SQLiteConnection con)
+	{
+		try
+		{
+			//for(int n = 1; n <= Enum.GetValues(typeof(Pokemons)).Length; n++)
+			//{ 
+				//Step 3: Running a Command
+				SQLiteCommand stmt = con.CreateCommand();
+
+				#region DataReader
+				stmt.CommandText = "select * from pokemon_moves where version_group_id=18 --order by pokemon_id ASC";
+				//	@"select pokemon_moves.pokemon_id, pokemon_moves.move_id, pokemon_moves.level, pokemon_moves.pokemon_move_method_id, pokemon_moves."order", pokemon_moves.version_group_id,
+				//pokemon_move_methods.identifier 
+				//from pokemon_moves 
+				//left join pokemon_move_methods on pokemon_move_methods.id=pokemon_moves.pokemon_move_method_id 
+				//where version_group_id=18 
+				//--order by pokemon_id ASC";
+				SQLiteDataReader reader = stmt.ExecuteReader();
+
+				//Step 4: Read the results
+				using(reader)
+				{
+					Dictionary<Pokemons, List<Monster.Data.PokemonMoveset>> p = new Dictionary<Pokemons, List<Monster.Data.PokemonMoveset>>();
+					while(reader.Read()) //if(reader.Read())
+					{
+						if (!p.ContainsKey((Pokemons)int.Parse((string)reader["pokemon_id"].ToString())))
+							p.Add((Pokemons)int.Parse((string)reader["pokemon_id"].ToString()),
+								new List<Monster.Data.PokemonMoveset>());
+						p[(Pokemons)int.Parse((string)reader["pokemon_id"].ToString())].Add(
+							new PokemonUnity.Monster.Data.PokemonMoveset(
+								moveId: (Moves)int.Parse((string)reader["move_id"].ToString())
+								//pokemonId: (Pokemons)int.Parse((string)reader["pokemon_id"].ToString())
+								,generation: int.Parse((string)reader["version_group_id"].ToString())
+								,method: (LearnMethod)int.Parse((string)reader["pokemon_move_method_id"].ToString())
+								,level: int.Parse((string)reader["level"].ToString())
+								//,order: int.Parse((string)reader["order"].ToString())
+							)
+						);
+					}
+				//}
+				//Step 5: Closing up
+				reader.Close();
+				reader.Dispose();
+				#endregion
+				foreach (var pkmn in p)
+				{
+					PokemonMovesData.Add(pkmn.Key, pkmn.Value.ToArray());
+				}
+			}
+			return true;
+		} catch (SQLiteException e) {
+			//Debug.Log("SQL Exception Message:" + e.Message);
+			//Debug.Log("SQL Exception Code:" + e.ErrorCode.ToString());
+			//Debug.Log("SQL Exception Help:" + e.HelpLink);
+			return false;
+		}
+	}
 	static bool GetPokemonsFromXML()
 	{
 		PokemonData = new Dictionary<Pokemons, PokemonUnity.Monster.Data.PokemonData>();
@@ -140,7 +206,6 @@ public partial class Game
 
 		return true; //dictionary;
 	}
-
 	static bool GetPokemonsFromSQL(SQLiteConnection con)
 	{
 		try
