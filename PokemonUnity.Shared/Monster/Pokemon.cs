@@ -148,7 +148,7 @@ namespace PokemonUnity.Monster
                 if (eggSteps > 0 && value == 0)
                 {
                     this.Level = Core.EGGINITIALLEVEL;
-                    //this.GenerateMoveset();
+                    this.GenerateMoveset();
                 }
                 eggSteps =
                     //if egg hatch counter is going up in positive count
@@ -244,7 +244,7 @@ namespace PokemonUnity.Monster
             Gender = gender; //GenderRatio.//Pokemon.PokemonData.GetPokemon(pokemon).MaleRatio
 			//ToDo: Undo comment
 			//Item = (Items)_base.HeldItem[0,Core.pokemonGeneration];
-            //GenerateMoveset();
+            GenerateMoveset();
 
             //calcStats();
         }
@@ -269,9 +269,7 @@ namespace PokemonUnity.Monster
 		/// <param name="isEgg">Whether or not this pokemon is hatched; 
 		/// if pokemon <see cref="isEgg"/> is false, it loses benefits 
 		/// of learning egg moves</param>
-		public Pokemon(Pokemons pkmn, byte level, bool isEgg = false) : this(pkmn, isEgg) { Level = level; /*GenerateMoveset();*/ }
-
-		//public Pokemon(Pokemons pkmn, byte loLevel, byte hiLevel, bool isEgg = false) : this(pkmn, isEgg) {  }
+		public Pokemon(Pokemons pkmn, byte level, bool isEgg = false) : this(pkmn, isEgg) { Level = level; GenerateMoveset(); }
 
 		/// <summary>
 		/// Instializes a new Pokemon, with values at default. 
@@ -1186,8 +1184,7 @@ namespace PokemonUnity.Monster
         public byte countMoves()
         {
             byte ret = 0;
-            for (byte i = 0; i < 4; i++)
-            {//foreach(var move in this.moves){ 
+            for (byte i = 0; i < 4; i++){//foreach(var move in this.moves){ 
                 if ((int)this.moves[i].MoveId != 0) ret += 1;//move.id
             }
             return ret;
@@ -1209,7 +1206,7 @@ namespace PokemonUnity.Monster
 
         public bool knowsMove(Moves move) { return this.hasMove(move); }
 
-        /*// <summary>
+        /// <summary>
         /// Returns the list of moves this Pokémon can learn by training method.
         /// </summary>
         public Moves[] getMoveList(LearnMethod? method = null)
@@ -1217,25 +1214,25 @@ namespace PokemonUnity.Monster
             switch (method)
             {
                 case LearnMethod.egg:
-                    return _base.MoveTree.Egg;
+                    return Game.PokemonMovesData[pokemons].Egg;
                 case LearnMethod.levelup:
-                    return _base.MoveTree.LevelUp.Where(x => x.Value <= this.Level).Select(x => x.Key).ToArray();
+                    return Game.PokemonMovesData[pokemons].LevelUp.Where(x => x.Value <= this.Level).Select(x => x.Key).ToArray();
                 case LearnMethod.machine:
-                    return _base.MoveTree.Machine;
+                    return Game.PokemonMovesData[pokemons].Machine;
                 case LearnMethod.tutor:
-                    return _base.MoveTree.Tutor;
+                    return Game.PokemonMovesData[pokemons].Tutor;
                 case LearnMethod.shadow:
                 case LearnMethod.xd_shadow:
                     List<Moves> s = new List<Moves>();
-                    s.AddRange(_base.MoveTree.Shadow);
-                    s.AddRange(_base.MoveTree.Shadow.Where(x => !s.Contains(x)).Select(x => x));
+                    s.AddRange(Game.PokemonMovesData[pokemons].Shadow);
+                    s.AddRange(Game.PokemonMovesData[pokemons].Shadow.Where(x => !s.Contains(x)).Select(x => x));
                     return s.ToArray();
                 default:
                     List<Moves> list = new List<Moves>();
-                    list.AddRange(_base.MoveTree.Egg);
-                    list.AddRange(_base.MoveTree.Machine.Where(x => !list.Contains(x)).Select(x => x));
-                    list.AddRange(_base.MoveTree.Tutor.Where(x => !list.Contains(x)).Select(x => x));
-                    list.AddRange(_base.MoveTree.LevelUp.Where(x => !list.Contains(x.Key))//(x => x.Value <= this.Level)
+                    list.AddRange(Game.PokemonMovesData[pokemons].Egg);
+                    list.AddRange(Game.PokemonMovesData[pokemons].Machine.Where(x => !list.Contains(x)).Select(x => x));
+                    list.AddRange(Game.PokemonMovesData[pokemons].Tutor.Where(x => !list.Contains(x)).Select(x => x));
+                    list.AddRange(Game.PokemonMovesData[pokemons].LevelUp.Where(x => !list.Contains(x.Key))//(x => x.Value <= this.Level)
 						.Select(x => x.Key));
                     return list.ToArray();
             }
@@ -1255,7 +1252,7 @@ namespace PokemonUnity.Monster
 			resetMoves();
             int numMove = Core.Rand.Next(3)+1; //number of moves pokemon will have, between 0 and 3
             List<Moves> movelist = new List<Moves>();
-            if (isEgg || Game.CatchPokemonsWithEggMoves) movelist.AddRange(_base.MoveTree.Egg);
+            if (isEgg || Game.CatchPokemonsWithEggMoves) movelist.AddRange(Game.PokemonMovesData[pokemons].Egg);
 			int?[] rejected = new int?[movelist.Count];
             switch (level)
             {
@@ -1264,7 +1261,7 @@ namespace PokemonUnity.Monster
                 case 0:
                     //Set moveset based off of the highest level moves possible.
                     //string[] moves = new string[4];
-                    int i = _base.MoveTree.LevelUp.Count - 1; //work backwards so that the highest level move possible is grabbed first
+                    int i = Game.PokemonMovesData[pokemons].LevelUp.Count - 1; //work backwards so that the highest level move possible is grabbed first
                     int[,] movesetLevels = new int[1, 2]; //[index,{moveId,level}]
                     while (moves[3] == null)
                     {
@@ -1309,7 +1306,7 @@ namespace PokemonUnity.Monster
                 #endregion
                 case null:
                     //case -1:
-                    movelist.AddRange(_base.MoveTree.LevelUp.Where(x => x.Value <= this.Level).Select(x => x.Key));
+                    movelist.AddRange(Game.PokemonMovesData[pokemons].LevelUp.Where(x => x.Value <= this.Level).Select(x => x.Key));
 					rejected = new int?[movelist.Count];
                     for (int n = 0; n < movelist.Count; n++)
                     {
@@ -1331,8 +1328,8 @@ namespace PokemonUnity.Monster
                     }
                     break;
                 default:
-                    //if (isEgg || Core.CatchPokemonsWithEggMoves) movelist.AddRange(_base.MoveTree.Egg);
-                    movelist.AddRange(_base.MoveTree.LevelUp.Where(x => x.Value <= level.Value).Select(x => x.Key));
+                    //if (isEgg || Core.CatchPokemonsWithEggMoves) movelist.AddRange(Game.PokemonMovesData[pokemons].Egg);
+                    movelist.AddRange(Game.PokemonMovesData[pokemons].LevelUp.Where(x => x.Value <= level.Value).Select(x => x.Key));
 					rejected = new int?[movelist.Count];
                     //int listend = movelist.Count - 4;
                     //listend = listend < 0 ? 0 : listend + 4;
@@ -1386,13 +1383,14 @@ namespace PokemonUnity.Monster
         /// <param name="move"></param>
         /// <param name="silently"></param>
         /// <returns></returns>
+		/// ToDo: Move "bool silent = false" to engine platform (requires UI) 
         public void LearnMove(Moves move, out bool success, bool silently = false)
         {
 			success = false;
             if ((int)move <= 0) return;
             if (!getMoveList().Contains(move))
             {
-                Game.DebugLog("Move is not compatible");
+                //Game.DebugLog("Move is not compatible");
                 return;
             }
             //for (int i = 0; i < 4; i++) {
@@ -1410,7 +1408,7 @@ namespace PokemonUnity.Monster
             //}
             if (hasMove(move))
             {
-                Game.DebugLog("Already knows move...");
+                //Game.DebugLog("Already knows move...");
                 return;
             }
             for (int i = 0; i < 4; i++)
@@ -1423,7 +1421,7 @@ namespace PokemonUnity.Monster
             }
             if (!silently)
 			{
-                Game.DebugLog("Cannot learn move, pokmeon moveset is full", false);
+                //Game.DebugLog("Cannot learn move, pokmeon moveset is full", false);
 			}
             else
             {
@@ -1443,10 +1441,10 @@ namespace PokemonUnity.Monster
 		{
 			bool moveLearned = false;
 			List<Moves> movelist = new List<Moves>();
-			if (isEgg || Game.CatchPokemonsWithEggMoves) movelist.AddRange(_base.MoveTree.Egg);
+			if (isEgg || Game.CatchPokemonsWithEggMoves) movelist.AddRange(Game.PokemonMovesData[pokemons].Egg);
 			int?[] rejected = new int?[movelist.Count];
-			//if (isEgg || Core.CatchPokemonsWithEggMoves) movelist.AddRange(_base.MoveTree.Egg);
-			movelist.AddRange(_base.MoveTree.LevelUp.Where(x => x.Value == level).Select(x => x.Key));
+			//if (isEgg || Core.CatchPokemonsWithEggMoves) movelist.AddRange(Game.PokemonMovesData[pokemons].Egg);
+			movelist.AddRange(Game.PokemonMovesData[pokemons].LevelUp.Where(x => x.Value == level).Select(x => x.Key));
 			rejected = new int?[movelist.Count];
 			//int listend = movelist.Count - 4;
 			//listend = listend < 0 ? 0 : listend + 4;
@@ -1471,7 +1469,7 @@ namespace PokemonUnity.Monster
 				else
 					break;
 			}
-		}*/
+		}
 
         /// <summary>
         /// Deletes the given move from the Pokémon.

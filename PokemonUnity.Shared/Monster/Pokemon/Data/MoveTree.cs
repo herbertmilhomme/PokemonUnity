@@ -44,7 +44,6 @@ namespace PokemonUnity.Monster.Data
         public Moves[] Purification { get; private set; }
         public Moves[] FormChange { get; private set; }
         #endregion
-        //public PokemonMoveTree() { }
         public PokemonMoveTree(
                 SortedList<Moves, int> levelup = null,
                 Moves[] egg = null,

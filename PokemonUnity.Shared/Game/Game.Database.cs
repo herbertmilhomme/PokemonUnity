@@ -29,7 +29,7 @@ public partial class Game
 {
 	const string FilePokemonXML = "";
 	//ToDo: ReadOnly Immutable Dictionaries...
-	public static Dictionary<Pokemons, PokemonUnity.Monster.Data.PokemonMoveset[]> PokemonMovesData { get; private set; }
+	public static Dictionary<Pokemons, PokemonUnity.Monster.Data.PokemonMoveTree> PokemonMovesData { get; private set; }
 	public static Dictionary<Pokemons, PokemonUnity.Monster.Data.PokemonData> PokemonData { get; private set; }
 	//public static Dictionary<Moves,Move.MoveData> MoveData { get; private set; }
 	//public static Dictionary<Items,Item> ItemData { get; private set; }
@@ -52,7 +52,7 @@ public partial class Game
 
 	public static bool InitPokemonMoves(bool sql = true)
 	{
-		PokemonMovesData = new Dictionary<Pokemons, Monster.Data.PokemonMoveset[]>();
+		PokemonMovesData = new Dictionary<Pokemons, Monster.Data.PokemonMoveTree>();
 		if (sql) //using (con)
 			return GetPokemonMovesFromSQL(con);
 		else return GetPokemonsFromXML();
@@ -102,9 +102,10 @@ public partial class Game
 				reader.Close();
 				reader.Dispose();
 				#endregion
+				PokemonMovesData.Add(Pokemons.NONE, new Monster.Data.PokemonMoveTree(new Monster.Data.PokemonMoveset[] { }));
 				foreach (var pkmn in p)
 				{
-					PokemonMovesData.Add(pkmn.Key, pkmn.Value.ToArray());
+					PokemonMovesData.Add(pkmn.Key, new Monster.Data.PokemonMoveTree(pkmn.Value.ToArray()));
 				}
 			}
 			return true;
