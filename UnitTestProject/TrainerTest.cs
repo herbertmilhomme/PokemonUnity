@@ -33,7 +33,9 @@ namespace Tests
 
         #region TrainerPokemon
         [TestMethod]
-        public void Trainer_Party_AddPokemon() {
+        public void Trainer_Party_AddPokemon()
+		{
+			Assert.Inconclusive();
 			string playerName = "Red";
 			int trainerID = 55323;
 			int secretID = 64123;

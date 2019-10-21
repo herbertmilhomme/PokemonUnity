@@ -137,6 +137,7 @@ namespace Tests
         [TestMethod]
         public void Create_New_Save_File()
 		{
+			Assert.Inconclusive("Code is temporarily stripped from project");
 			//SaveData newSave = New_Save_File_With_Standard_Unit_Test_Values();
 			Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
 
@@ -153,6 +154,7 @@ namespace Tests
         [TestMethod]
         public void Save_Into_File()
 		{
+			Assert.Inconclusive("Code is temporarily stripped from project");
 			//SaveData newSave = New_Save_File_With_Standard_Unit_Test_Values();
 			Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
 
@@ -166,17 +168,19 @@ namespace Tests
         [TestMethod]
         public void Load_Save_File()
         {
+			Assert.Inconclusive("Code is temporarily stripped from project");
 			#region Save File Setup
 			SaveData newSave = New_Save_File_With_Standard_Unit_Test_Values();
 
 			SaveManager.Overwrite(newSave, 2);
-            #endregion
-            Assert.IsNotNull(SaveManager.GetSaves()[2]);
+			#endregion
+			Assert.IsNotNull(SaveManager.GetSaves()[2]);
         }
 
         [TestMethod]
         public void Compare_Save_Files()
-        {
+		{
+			Assert.Inconclusive("Code is temporarily stripped from project");
 			SaveData newSave = New_Save_File_With_Standard_Unit_Test_Values();
 
 			SaveManager.Overwrite(newSave, 1);
@@ -319,8 +323,9 @@ namespace Tests
         #region Game Start => Loading A Save File
         [TestMethod]
         public void Player_Load_Name()
-        {
-            Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
+		{
+			Assert.Inconclusive("Code is temporarily stripped from project");
+			Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
 
             SaveData newSave = SaveManager.GetSaves()[0];
 
@@ -334,8 +339,9 @@ namespace Tests
         //}
         [TestMethod]
         public void SaveData_Load_Party()
-        {
-            Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
+		{
+			Assert.Inconclusive("Code is temporarily stripped from project");
+			Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
 
 			byte saveSlot = 0;
             SaveData newSave = SaveManager.GetSaves()[saveSlot];
@@ -369,8 +375,9 @@ namespace Tests
         }
         [TestMethod]
         public void Player_Load_Party()
-        {
-            //Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
+		{
+			Assert.Inconclusive("Code is temporarily stripped from project");
+			//Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
 
 			byte saveSlot = 0;
 			Game.Save(New_Save_File_With_Standard_Unit_Test_Values(), saveSlot);
@@ -406,8 +413,9 @@ namespace Tests
         }
         [TestMethod]
         public void Player_Load_Pokedex()
-        {
-            Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
+		{
+			Assert.Inconclusive("Code is temporarily stripped from project");
+			Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
 
             SaveData newSave = SaveManager.GetSave(0);
 			//this is testing for inferior pokedex... but was still functional code.
@@ -425,8 +433,9 @@ namespace Tests
         }
         [TestMethod]
         public void Player_Load_HoursPlayed()
-        {
-            Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
+		{
+			Assert.Inconclusive("Code is temporarily stripped from project");
+			Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
 
             SaveData newSave = SaveManager.GetSaves()[0];
             TimeSpan expectedTimeSpan = new TimeSpan(4, 20, 53);
@@ -440,8 +449,9 @@ namespace Tests
 		// to validate that the mechanic is functional
 		[TestMethod]
         public void Player_Load_Settings_Language()
-        {
-            Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
+		{
+			Assert.Inconclusive("Code is temporarily stripped from project");
+			Overwrite_New_Save_File_With_Standard_Unit_Test_Values();
 
             SaveData newSave = SaveManager.GetSave(0);
             Languages expectedLanguage = Languages.English;
@@ -507,5 +517,4 @@ namespace Tests
 		//}
         #endregion
     }
-
 }

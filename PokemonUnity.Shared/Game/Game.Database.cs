@@ -68,7 +68,7 @@ public partial class Game
 				SQLiteCommand stmt = con.CreateCommand();
 
 				#region DataReader
-				stmt.CommandText = "select * from pokemon_moves where version_group_id=18 --order by pokemon_id ASC";
+				stmt.CommandText = "select distinct move_id, pokemon_id, [level], pokemon_move_method_id from pokemon_moves --where version_group_id=18 order by pokemon_id ASC";
 				//	@"select pokemon_moves.pokemon_id, pokemon_moves.move_id, pokemon_moves.level, pokemon_moves.pokemon_move_method_id, pokemon_moves."order", pokemon_moves.version_group_id,
 				//pokemon_move_methods.identifier 
 				//from pokemon_moves 
@@ -90,7 +90,7 @@ public partial class Game
 							new PokemonUnity.Monster.Data.PokemonMoveset(
 								moveId: (Moves)int.Parse((string)reader["move_id"].ToString())
 								//pokemonId: (Pokemons)int.Parse((string)reader["pokemon_id"].ToString())
-								,generation: int.Parse((string)reader["version_group_id"].ToString())
+								//,generation: int.Parse((string)reader["version_group_id"].ToString())
 								,method: (LearnMethod)int.Parse((string)reader["pokemon_move_method_id"].ToString())
 								,level: int.Parse((string)reader["level"].ToString())
 								//,order: int.Parse((string)reader["order"].ToString())

@@ -148,7 +148,9 @@ namespace PokemonUnity.Monster
                 if (eggSteps > 0 && value == 0)
                 {
                     this.Level = Core.EGGINITIALLEVEL;
-                    this.GenerateMoveset();
+					//if hatching, generate new moves to include egg moves 
+					//and everything from current level to below
+                    this.GenerateMoveset(egg: true);
                 }
                 eggSteps =
                     //if egg hatch counter is going up in positive count
@@ -700,9 +702,9 @@ namespace PokemonUnity.Monster
 				//this.Heal(HPDifference);
 				HP += HPDifference;
 
-			//if (LearnRandomAttack)
-			//	//this.LearnAttack(this.Level);
-			//	LearnMove(TempLevel);
+			if (LearnRandomAttack)
+				//this.LearnAttack(this.Level);
+				LearnMove(TempLevel);
 		}
 
 		public bool isEgg
@@ -1241,8 +1243,9 @@ namespace PokemonUnity.Monster
         /// <summary>
         /// </summary>
         /// <param name="level"></param>
+        /// <param name="egg">if moves being generated should contain egg only items</param>
         /// ToDo: Higher the pokemon's level, the greater the chances of generating a full moveset (4 moves)
-        public void GenerateMoveset(int? level = null)
+        public void GenerateMoveset(int? level = null, bool egg = false)
         {
             if (level.HasValue && level.Value < 0)
                 return;
@@ -1250,9 +1253,9 @@ namespace PokemonUnity.Monster
             //	level = -1;
             ClearFirstMoves();
 			resetMoves();
-            int numMove = Core.Rand.Next(3)+1; //number of moves pokemon will have, between 0 and 3
+            int numMove = Core.Rand.Next(4)+1; //number of moves pokemon will have, between 0 and 3
             List<Moves> movelist = new List<Moves>();
-            if (isEgg || Game.CatchPokemonsWithEggMoves) movelist.AddRange(Game.PokemonMovesData[pokemons].Egg);
+            if (isEgg || egg || Game.CatchPokemonsWithEggMoves) movelist.AddRange(Game.PokemonMovesData[pokemons].Egg);
 			int?[] rejected = new int?[movelist.Count];
             switch (level)
             {
