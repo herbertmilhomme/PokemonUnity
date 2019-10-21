@@ -462,125 +462,90 @@ namespace Tests
             pokemon.DeleteMove(Moves.TACKLE);
             Assert.IsTrue(pokemon.countMoves() == before - 1);
         }
-        //[TestMethod]
-        //public void Pokemon_Replace_Move_Return_Different_Moves()
-        //{
-        //	Assert.Inconclusive();
-        //}
-        //[TestMethod]
-        //public void Pokemon_Swap_Moves_Change_OrderOf_Moves()
-        //{
-        //	//Loop thru all moves, make sure they're all present
-        //	Assert.Inconclusive();
-        //}
-        //[TestMethod]
-        //public void Pokemon_Return_MoveList_CanLearn_At_CurrentLevel()
-        //{
-        //    //Pokemon pokemon = new Pokemon();
-        //    //Pokemon.PokemonData.GetPokemon(Pokemons.NONE).MoveTree.LevelUp.Where(x => x.Value <= this.Level).Select(x => x.Key)
-        //    //list of moves can learn at level
-        //    //Assert.AreSame(new Moves[] { }, new Pokemon().getMoveList());
-        //    Assert.IsTrue(new Pokemon(Pokemons.BULBASAUR, level: 25).getMoveList(LearnMethod.levelup).Length > 0);
-        //}
-        //[TestMethod]
-        //public void Pokemon_PokemonTest_CantLearn_Move_NotCompatible_With_TeachMethod()
-        //{
-        //    //list of moves a pokemon can learn for a given technique
-        //    //attempt to teach move
-        //    //confirm moves are unchanged 
-        //    Assert.Inconclusive();
-        //}
-        #endregion
+		//[TestMethod]
+		//public void Pokemon_Replace_Move_Return_Different_Moves()
+		//{
+		//	Assert.Inconclusive();
+		//}
+		//[TestMethod]
+		//public void Pokemon_Swap_Moves_Change_OrderOf_Moves()
+		//{
+		//	//Loop thru all moves, make sure they're all present
+		//	Assert.Inconclusive();
+		//}
+		//[TestMethod]
+		//public void Pokemon_Return_MoveList_CanLearn_At_CurrentLevel()
+		//{
+		//    //Pokemon pokemon = new Pokemon();
+		//    //Pokemon.PokemonData.GetPokemon(Pokemons.NONE).MoveTree.LevelUp.Where(x => x.Value <= this.Level).Select(x => x.Key)
+		//    //list of moves can learn at level
+		//    //Assert.AreSame(new Moves[] { }, new Pokemon().getMoveList());
+		//    Assert.IsTrue(new Pokemon(Pokemons.BULBASAUR, level: 25).getMoveList(LearnMethod.levelup).Length > 0);
+		//}
+		//[TestMethod]
+		//public void Pokemon_PokemonTest_CantLearn_Move_NotCompatible_With_TeachMethod()
+		//{
+		//    //list of moves a pokemon can learn for a given technique
+		//    //attempt to teach move
+		//    //confirm moves are unchanged 
+		//    Assert.Inconclusive();
+		//}
+		#endregion
 
-        #region Evolving/evolution
-        //Use eevee to test different evolve code, as it's a perfect practice test
-        //[TestMethod]
-        //public void Pokemon_TestPokemon_CanEvolve()
-        //{
-        //    Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
-        //    //Add exp
-        //    pokemon.Exp.AddExperience(50000);
-        //    //Assert is true
-        //    if (pokemon.hasEvolveMethod(EvolutionMethod.Level))
-        //        Assert.IsTrue(false);
-        //    else Assert.Fail("Unable to test if pokemon can evolve, as it does not have an evolution through leveling-up");
-        //}
-        [TestMethod]
+		#region Evolving/evolution
+		/*The various triggers for a Pokémon's evolution are almost as varied as the Pokémon themselves, and some Pokémon have a unique evolution method. 
+		 * The most common of them is Evolution by leveling up at or above a certain level. Other methods include the following:
+
+			* leveling up
+				* leveling up when friendship has reached a high level (220 or greater), sometimes only at certain times
+				* leveling up while holding an item, sometimes only at certain times
+				* leveling up while knowing a certain move or a move of a certain type
+				* leveling up in a certain location
+				* leveling up with a certain Pokémon or Pokémon of a certain type in the party
+				* leveling up while upside-down
+				* leveling up during certain types of weather
+			* being traded
+				* being traded while holding a specific item
+				* being traded for a specific Pokémon
+			* using an evolutionary stone
+		Some evolutions are dependent on the Pokémon's gender. For example, only female Combee can evolve into Vespiquen—male Combee cannot evolve at all. 
+		Similarly, all Snorunt can evolve into Glalie, but only female Snorunt can evolve into Froslass. On the other hand, 
+		male Burmy can only evolve into Mothim, while female Burmy can only evolve into Wormadam.*/
+		//Use eevee to test different evolve code, as it's a perfect practice test
+		//[TestMethod]
+		//public void Pokemon_TestPokemon_CanEvolve()
+		//{
+		//    Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
+		//    //Add exp
+		//    pokemon.Exp.AddExperience(50000);
+		//    //Assert is true
+		//    if (pokemon.hasEvolveMethod(EvolutionMethod.Level))
+		//        Assert.IsTrue(false);
+		//    else Assert.Fail("Unable to test if pokemon can evolve, as it does not have an evolution through leveling-up");
+		//}
+		[TestMethod]
         public void Pokemon_TestPokemon_EvolvePokemon()
         {
+            Assert.Inconclusive();
             Pokemon pokemon = new Pokemon(Pokemons.BULBASAUR);
             Assert.AreEqual(Pokemons.IVYSAUR, pokemon.Species);
         }
-        #endregion
+		#endregion
 
-        #region Misc
-        [TestMethod]
-        public void Pokemon_WildPokemon_With_Item()
-        {
-			//Instantiate wild pokemon, maybe 100 times
-			//check to see if wild pokemon is created with held item
-			//pass if held item is true
-            //Maybe this one isnt needed?...
-			//Wild pokemons are (any/instantiated) pkmns without trainers?
-            Assert.Inconclusive();
-        }
-        [TestMethod]
-        public void Pokemon_TestPokemon_SetForm_To_Form2()
-        {
-            Pokemon pokemon = new Pokemon(Pokemons.NONE);
-            pokemon.Form = 2;
-            //Assert.AreEqual("test1", pokemon.Name);
-			Assert.Inconclusive("Not implemented yet");
-		}
-        [TestMethod]
-        //Changing form changes base stats
-        public void Pokemon_TestPokemon_SetForm_IncreasesAtkStats()
-        {
-            Pokemon pokemon = new Pokemon(Pokemons.NONE);
-            pokemon.Form = 1;
-            //Assert.AreNotEqual(Pokemon.PokemonData.GetPokemon(pokemon.Species).BaseStatsATK, pokemon.ATK);
-            //Assert.Fail("Need to find way to compare Pokemon.baseStats to Form.baseStats");
-			Assert.Inconclusive("Not implemented yet");
-		}
-        //[TestMethod]
-        //public void Pokemon_TestPokemon_GetPokemon_From_Form()
-        //{
-        //	//Maybe this one isnt needed?... 
-        //	Assert.Inconclusive();
-        //}
-        [TestMethod]
-        public void Pokemon_TestPokemon_Set_Ribbons_Tier3_OutOf_4()
-        {
-			Assert.Inconclusive("Should research more on ribbon mechanic");
-            Pokemon pokemon = new Pokemon(Pokemons.NONE);
-            //Set ribbons to tier 3
-            //Check if contains other tiers rank 1 and 2
-            Assert.IsTrue(pokemon.Ribbons.Contains(Ribbon.HOENNTOUGHHYPER));
-            //Create 2nd assert for regular pokemon
-            //Assert.Fail("Pokemon NONE cannot obtain ribbons");
-			Assert.Inconclusive("Not implemented yet");
-		}
-        [TestMethod]
-        public void Pokemon_TestPokemon_Add_Ribbons_OfSameType_Increases_RankTier()
-        {
-			Assert.Inconclusive("Should research more on ribbon mechanic");
-            Pokemon pokemon = new Pokemon(Pokemons.NONE);
-            //Add Ribbon.HOENNTOUGH x4
-            Assert.IsTrue(pokemon.Ribbons.Contains(Ribbon.HOENNTOUGHHYPER));
-            //Create 2nd assert for regular pokemon
-            //Assert.Fail("Pokemon NONE cannot obtain ribbons");
-			Assert.Inconclusive("Not implemented yet");
-		}
-        [TestMethod]
-        public void Pokemon_TestPokemon_Set_Markings()
-        {
-            Pokemon pokemon = new Pokemon(Pokemons.NONE)
-            {
-                Markings = new bool[] { false, true, true, false, false, false }
-            };
-            //bool[] marks = new bool[6]; marks[1] = marks[2] = true;
-            Assert.IsTrue(pokemon.Markings[2]);
-        }
+		#region Shadow/Heart Guage
+		/* The Trainer of a Shadow Pokémon cannot do any of the following with it until it is purified:
+
+			* Level it up (when it is purified, it gains all the exp. accumulated as a Shadow Pokémon, which is only when its Heart Gauge is less than three bars full).
+			* Evolve it (evolves when gaining exp.)
+			* Use a Rare Candy on it.
+			* Change the order of its moves.
+			* Delete its moves.
+			* Give it a nickname (due to not having an OT or ID).
+			* Trade it.
+			* Participate in Battle Mode with it.
+			* Enter it in battles at Phenac Stadium.
+			* Enter it in battles at Orre Colosseum.
+		Shadow Pokémon are also unable to gain effort values from battling, although vitamins can still be used on them.*/
         [TestMethod]
         public void Pokemon_TestPokemon_Set_To_Shadow()
         {
@@ -592,25 +557,44 @@ namespace Tests
         [TestMethod]
         public void Pokemon_TestPokemon_Shadow_Fail_To_Purify_If_HeartGuage_Not_Zero()
         {
+			Assert.Inconclusive("Not implemented yet");
             Pokemon pokemon = new Pokemon(Pokemons.NONE);
             if (!pokemon.isShadow) Assert.Fail("Is not Shadow, cannot purify");
 			//Check guage
 			//Attempt to purify
 			//Fail if goal isnt met
             //Assert.IsTrue(pokemon.isShadow);
-			Assert.Inconclusive("Not implemented yet");
         }
-        [TestMethod]
-        public void Pokemon_Mail_Test_Pokemon_HoldMessage()
-        {
-            Pokemon pokemon = new Pokemon(Pokemons.NONE);
-			//Write message, Pick Mail design
-			//Save to pokemon
-			//Check pokemon and confirm it's still there
-            //Assert.IsNotNull(pokemon.Mail);
-			Assert.Inconclusive("Not implemented yet");
-		}
-        #endregion
+		#endregion
+
+		#region Shiny
+		/*The table below summarizes the rates at which Shiny Pokémon can be found by the methods that will be detailed below. 
+		 * The Shiny Charm can directly add to the odds for most methods, with hidden Pokémon being affected uniquely.
+							|Gen.II	|Gen.III	|Gen.IV	|Gen.V	|Gen.VI				|Gen.VII
+							------------------------------------------------------------------
+Base rate					|1/8192						|1/4096	
+							------------------------------------------------------------------
+Breeding a Shiny Pokémon	|		|			|		|		|					|
+(if the offspring is the 	|1/64	|—			|—		|—		|—					|—
+opposite gender)			|		|			|		|		|					|
+							------------------------------------------------------------------
+Masuda method				|—		|—			|5/8192	|6/8192	|6/4096				
+							------------------------------------------------------------------
+Poké Radar chaining 		|		|			|		|		|					|
+(single patch): ≥40			|—		|—			|41/8192|—		|?					|—
+							------------------------------------------------------------------
+Shiny Charm					|—		|—			|—		|+2/8192|+2/4096			
+							------------------------------------------------------------------
+Friend Safari				|—		|—			|—		|—		|5/4096				|—
+							------------------------------------------------------------------
+Consecutive fishing: ≥20	|—		|—			|—		|—		|41/4096			|—
+							------------------------------------------------------------------
+Hidden Pokémon: 			|		|			|		|		|					|
+Search Level 200 + X		|—		|—			|—		|—		|0.08% + X*0.01%	|—
+							------------------------------------------------------------------
+SOS Battles: ≥31			|—		|—			|—		|—		|—					|13/4096
+							------------------------------------------------------------------*/
+		#endregion
 
         #region Gender..
         //[TestMethod]
@@ -656,6 +640,101 @@ namespace Tests
             else
                 Assert.Fail("Testing for gender ratio of {0}; but pokemon gender chances are {1}", "One-Eighth Percent Females", genders.ToString());
         }
+		#endregion
+
+		#region Forms
+		/*
+		 * Unowns and their different letters, should reference same pokemon id (same with pikachu)
+		 * Learn moves based on form... (Deoxys)
+		 * From change based on items...
+		 * Form change based on gender
+		 * Evolutions.. (some evolve into form based on specific criteria)
+		 * Some forms are fusions...
+		 * Some forms are purely cosmetic and change based on frontend/ui (connect overworld/weather mechanic to backend)
+		 * Some forms are battle only forms, and battle mechanic is going to be frontend only (will need to redo/reference code)
+		 * Pokemon Vivillion form is based on player's physical GPS location (pc IP Address)
+		 * ToDo: Connect different forms to return correct UI (texture/model matches pokemon id) 
+		 */
+        [TestMethod]
+        public void Pokemon_TestPokemon_SetForm_To_Form2()
+        {
+            Pokemon pokemon = new Pokemon(Pokemons.NONE);
+            pokemon.Form = 2;
+            //Assert.AreEqual("test1", pokemon.Name);
+			Assert.Inconclusive("Not implemented yet");
+		}
+        [TestMethod]
+        //Changing form changes base stats
+        public void Pokemon_TestPokemon_SetForm_IncreasesAtkStats()
+        {
+            Pokemon pokemon = new Pokemon(Pokemons.NONE);
+            pokemon.Form = 1;
+            //Assert.AreNotEqual(Pokemon.PokemonData.GetPokemon(pokemon.Species).BaseStatsATK, pokemon.ATK);
+            //Assert.Fail("Need to find way to compare Pokemon.baseStats to Form.baseStats");
+			Assert.Inconclusive("Not implemented yet");
+		}
+		#endregion
+
+		#region Misc
+		[TestMethod]
+        public void Pokemon_WildPokemon_With_Item()
+        {
+			//Instantiate wild pokemon, maybe 100 times
+			//check to see if wild pokemon is created with held item
+			//pass if held item is true
+            //Maybe this one isnt needed?...
+			//Wild pokemons are (any/instantiated) pkmns without trainers?
+            Assert.Inconclusive();
+        }
+        //[TestMethod]
+        //public void Pokemon_TestPokemon_GetPokemon_From_Form()
+        //{
+        //	//Maybe this one isnt needed?... 
+        //	Assert.Inconclusive();
+        //}
+        [TestMethod]
+        public void Pokemon_TestPokemon_Set_Ribbons_Tier3_OutOf_4()
+        {
+			Assert.Inconclusive("Should research more on ribbon mechanic");
+            Pokemon pokemon = new Pokemon(Pokemons.NONE);
+            //Set ribbons to tier 3
+            //Check if contains other tiers rank 1 and 2
+            Assert.IsTrue(pokemon.Ribbons.Contains(Ribbon.HOENNTOUGHHYPER));
+            //Create 2nd assert for regular pokemon
+            //Assert.Fail("Pokemon NONE cannot obtain ribbons");
+			Assert.Inconclusive("Not implemented yet");
+		}
+        [TestMethod]
+        public void Pokemon_TestPokemon_Add_Ribbons_OfSameType_Increases_RankTier()
+        {
+			Assert.Inconclusive("Should research more on ribbon mechanic");
+            Pokemon pokemon = new Pokemon(Pokemons.NONE);
+            //Add Ribbon.HOENNTOUGH x4
+            Assert.IsTrue(pokemon.Ribbons.Contains(Ribbon.HOENNTOUGHHYPER));
+            //Create 2nd assert for regular pokemon
+            //Assert.Fail("Pokemon NONE cannot obtain ribbons");
+			Assert.Inconclusive("Not implemented yet");
+		}
+        [TestMethod]
+        public void Pokemon_TestPokemon_Set_Markings()
+        {
+            Pokemon pokemon = new Pokemon(Pokemons.NONE)
+            {
+                Markings = new bool[] { false, true, true, false, false, false }
+            };
+            //bool[] marks = new bool[6]; marks[1] = marks[2] = true;
+            Assert.IsTrue(pokemon.Markings[2]);
+        }
+        [TestMethod]
+        public void Pokemon_Mail_Test_Pokemon_HoldMessage()
+        {
+            Pokemon pokemon = new Pokemon(Pokemons.NONE);
+			//Write message, Pick Mail design
+			//Save to pokemon
+			//Check pokemon and confirm it's still there
+            //Assert.IsNotNull(pokemon.Mail);
+			Assert.Inconclusive("Not implemented yet");
+		}
         #endregion
     }
 }
