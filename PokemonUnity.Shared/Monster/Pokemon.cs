@@ -1419,6 +1419,7 @@ namespace PokemonUnity.Monster
                 if (moves[i].MoveId == 0)
                 {
                     moves[i] = new Move(move);
+					success = true;
                     return;
                 }
             }
