@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PokemonUnity;
+using PokemonUnity.Inventory;
 
 /// <summary>
 /// Namespace to nest all Pokemon Move Enums
